@@ -6,6 +6,7 @@
       xmlns:local="clr-namespace:eTOM"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
+      Loaded="Page_Loaded"
       Title="maingui">
 
     <Page.Resources>
@@ -48,10 +49,29 @@
 
         <TabControl DockPanel.Dock="Top" Background="#ffb56b" BorderBrush="#ffb56b" TabStripPlacement="Left"  >
 
-            <TabItem x:Name="tabItem" Header="Услуги" ></TabItem>
+            <TabItem x:Name="tabItem" Header="Услуги" >
+                <TabItem.Content>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="60"></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <DataGrid AutoGenerateColumns="False"  Grid.Row="1" x:Name="services" ItemsSource="{Binding Path=Services}" CanUserResizeRows="False" >
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Название" Width="*" Binding="{Binding Path=serv_name}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Описание" Width="*" Binding="{Binding Path=about}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Цена" Width="*" Binding="{Binding Path=date}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Дата создания" Width="*" Binding="{Binding Path=price}"></DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        
+                    </Grid>
+                </TabItem.Content>
+            </TabItem>
             <TabItem Header="Маркетинг" ></TabItem>
 
         </TabControl>
+        
         <Canvas>
             <Button  Canvas.Bottom="0" Canvas.Left="0" Width="102" Height="40" Content="Exit" Click="Button_Click"></Button>
         </Canvas>
