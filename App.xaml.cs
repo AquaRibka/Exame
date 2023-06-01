@@ -6,7 +6,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace eTOM
+
+namespace Model_eTOM
 {
     /// <summary>
     /// Логика взаимодействия для App.xaml

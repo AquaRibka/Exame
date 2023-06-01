@@ -1,0 +1,38 @@
+﻿<Window x:Class="Model_eTOM.Forecast"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Model_eTOM"
+        mc:Ignorable="d"
+        Loaded="Window_Loaded"
+        Title="Forecast" Height="450" Width="800" Style="{StaticResource WindowStyle}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.05*"/>
+            <RowDefinition Height="0.05*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.05*"/>
+            <RowDefinition Height="0.15*"/>
+            <RowDefinition Height="0.05*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.05*"/>
+            <ColumnDefinition Width="0.1*"/>
+            <ColumnDefinition Width="0.5*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="0.5*"/>
+            <ColumnDefinition Width="0.1*"/>
+            <ColumnDefinition Width="0.05*"/>
+        </Grid.ColumnDefinitions>
+        <Rectangle Fill="#117B8E" Grid.Column="1" Grid.ColumnSpan="5" Grid.Row="1" Grid.RowSpan="4"  StrokeThickness="0" RadiusX="20" RadiusY="20"/>
+        <Rectangle Fill="#2C4370" Grid.Column="2" Grid.ColumnSpan="3" Grid.Row="2" StrokeThickness="0" RadiusX="20" RadiusY="20"/>
+        <Image x:Name="chartImage" Grid.Column="2" Grid.ColumnSpan="3" Grid.Row="2" Stretch="Uniform" Margin="0,0,0,10" />
+        <TextBlock x:Name="Date" Text="Дата проведения: " Margin="10,0,0,0"  Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3" Style="{StaticResource Forecast}"/>
+        <TextBlock x:Name="Budget" Text="Бюджет: " Margin="0,0,10,0"  Grid.Row="4" Grid.Column="4" Grid.ColumnSpan="2" Style="{StaticResource Forecast}"/>
+        <Button Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2" Width="Auto" Content="Закрыть"/>
+        <Button Grid.Row="6" Grid.Column="4" Grid.ColumnSpan="2" Width="Auto" Content="Скачать изображение"/>
+    </Grid>
+</Window>

@@ -1,0 +1,67 @@
+﻿<Window x:Class="Model_eTOM.Add.Mark_add"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Model_eTOM.Add"
+        mc:Ignorable="d"
+        Title="Mark_add" Height="500" Width="800" Style="{StaticResource WindowStyle}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="1.5*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="1.5*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.3*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="0.3*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="0.3*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="0.3*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <TextBox Text="Название" Grid.Row="0" Grid.Column="1" Style="{StaticResource TextBoxModule}"></TextBox>
+        <TextBox Text="Планируемый бюджет" Grid.Row="0" Grid.Column="3" Grid.ColumnSpan="2" Style="{StaticResource TextBoxModule}"></TextBox>
+        <TextBox Text="Сроки" Grid.Row="0" Grid.Column="6" Grid.ColumnSpan="2" Style="{StaticResource TextBoxModule}" ></TextBox>
+        <TextBox Text="Цели" MaxLength="200" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="9" Style="{StaticResource TextBoxModule}" TextAlignment="Justify"></TextBox>
+        <TextBox Text="План действий" IsReadOnly="True" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="9" Style="{StaticResource TextBoxModule}" TextAlignment="Justify"></TextBox>
+        <ScrollViewer HorizontalScrollBarVisibility="Auto" Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="7" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="7*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.ColumnSpan="2" x:Name="planContainer"/>
+                <StackPanel Grid.Column="1"  x:Name="planContainerButton"/>
+            </Grid>
+        </ScrollViewer>
+        <TextBox Text="Связанные контракты" IsReadOnly="True" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="9" Style="{StaticResource TextBoxModule}" TextAlignment="Justify"></TextBox>
+        <ScrollViewer HorizontalScrollBarVisibility="Auto" Grid.Row="5" Grid.Column="2" Grid.ColumnSpan="7" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="7*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.ColumnSpan="2" x:Name="contractContainer"/>
+                <StackPanel Grid.Column="1"  x:Name="contractContainerButton"/>
+            </Grid>
+        </ScrollViewer>
+        <Button Click="PlanContainerAdd_Click" HorizontalAlignment="Right" VerticalContentAlignment="Center" Content="+" Padding="10" Width="40" Height="40" Grid.Row="2" Grid.Column="9" FontSize="24"/>
+        <Button Click="ContractContainerAdd_Click" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="9" Content="+" Padding="10" Width="40" Height="40" FontSize="24"></Button>
+        <Button Content="Добавить" Grid.Row="6" Grid.Column="3"></Button>
+        <Button Content="Очистить" Grid.Row="6" Grid.Column="5" Grid.ColumnSpan="2"></Button>
+        <Button Content="Отменить" Grid.Row="6" Grid.Column="8"></Button>
+        <Button Content="Удалить" Grid.Row="6" Grid.Column="8" Visibility="Collapsed"></Button>
+    </Grid>
+</Window>

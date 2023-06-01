@@ -10,20 +10,18 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Model_eTOM
+namespace Model_eTOM.Add
 {
     /// <summary>
-    /// Логика взаимодействия для MainWindow.xaml
+    /// Логика взаимодействия для Supply_add.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class Supply_add : Window
     {
-        public MainWindow()
+        public Supply_add()
         {
             InitializeComponent();
-            MainFrame.Content = new Main();
         }
     }
 }

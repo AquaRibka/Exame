@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace eTOM.Properties
+namespace Model_eTOM.Properties
 {
 
 

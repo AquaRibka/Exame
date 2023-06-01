@@ -1,0 +1,55 @@
+﻿<Window x:Class="Model_eTOM.Add.Eqp_add"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Model_eTOM.Add"
+        mc:Ignorable="d"
+        Title="Eqp_add" Height="450" Width="800" Style="{StaticResource WindowStyle}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2.5*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="2.5*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.3*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="0.3*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <TextBox Text="Название" Grid.Row="0" Grid.Column="1" Style="{StaticResource TextBoxModule}"/>
+        <TextBlock Text="Категория:" HorizontalAlignment="Stretch" TextAlignment="Center" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource Header}"/>
+        <ComboBox x:Name="Category" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" DisplayMemberPath="Display"/>
+        <TextBlock Text="Внутренний номер документа:" HorizontalAlignment="Stretch" TextAlignment="Center" Grid.Row="2" Grid.Column="4" Grid.ColumnSpan="2" Style="{StaticResource Header}"/>
+        <TextBox x:Name="Interial_number"  Grid.Row="3" Grid.Column="4" Grid.ColumnSpan="2" Style="{StaticResource InputBox}"/>
+        <TextBlock Text="Ответственный:" HorizontalAlignment="Stretch" TextAlignment="Center" Grid.Row="2" Grid.Column="7" Grid.ColumnSpan="2" Style="{StaticResource Header}"/>
+        <TextBox x:Name="Responsible" Grid.Row="3" Grid.Column="7" Grid.ColumnSpan="2" Style="{StaticResource InputBox}"/>
+        <TextBlock Text="Место покупки:" HorizontalAlignment="Stretch" TextAlignment="Center" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource Header}"/>
+        <TextBox x:Name="Buy_place" Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource InputBox}"/>
+        <TextBlock Text="Срок использования:" HorizontalAlignment="Stretch" TextAlignment="Center" Grid.Row="5" Grid.Column="4" Grid.ColumnSpan="2" Style="{StaticResource Header}"/>
+        <TextBox x:Name="Suitability" Grid.Row="6" Grid.Column="4" Grid.ColumnSpan="2" Style="{StaticResource InputBox}"/>
+        <TextBlock Text="ip адрес:" HorizontalAlignment="Stretch" TextAlignment="Center" Grid.Row="5" Grid.Column="7" Grid.ColumnSpan="2" Style="{StaticResource Header}"/>
+        <TextBox x:Name="ip" Grid.Row="6" Grid.Column="7" Grid.ColumnSpan="2" Style="{StaticResource InputBox}"/>
+        <TextBlock Text="Место расположения:" HorizontalAlignment="Stretch" TextAlignment="Center" Grid.Row="8" Grid.Column="4" Grid.ColumnSpan="2" Style="{StaticResource Header}"/>
+        <ComboBox x:Name="Cabinet" Grid.Row="9" Grid.Column="4" Grid.ColumnSpan="2"/>
+        <Button Content="Добавить" Grid.Row="10" Grid.Column="2"></Button>
+        <Button Content="Очистить" Grid.Row="10" Grid.Column="4" Grid.ColumnSpan="2"></Button>
+        <Button Content="Отменить" Grid.Row="10" Grid.Column="7"></Button>
+        <Button Content="Удалить" Grid.Row="10" Grid.Column="7" Visibility="Collapsed"></Button>
+    </Grid>
+</Window>
