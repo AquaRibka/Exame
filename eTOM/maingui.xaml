@@ -6,6 +6,8 @@
       xmlns:local="clr-namespace:eTOM"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
+      Loaded="Page_Loaded"
+      
       Title="maingui">
 
     <Page.Resources>
@@ -48,13 +50,50 @@
 
         <TabControl DockPanel.Dock="Top" Background="#ffb56b" BorderBrush="#ffb56b" TabStripPlacement="Left"  >
 
-            <TabItem x:Name="tabItem" Header="Услуги" ></TabItem>
+            <TabItem x:Name="tabItem" Header="Услуги" >
+                <TabItem.Content>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="60"></RowDefinition>
+                            <RowDefinition Height="295"></RowDefinition>
+                            <RowDefinition Height="0*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <DataGrid Background="#ffb56b" AutoGenerateColumns="False"  Grid.Row="1" x:Name="services" ItemsSource="{Binding Path=Services}" CanUserResizeRows="False" >
+                            <DataGrid.Resources>
+                                <Style TargetType="TextBlock" x:Key="WrapText">
+                                    <Setter Property="TextWrapping" Value="Wrap"/>
+                                </Style>
+                            </DataGrid.Resources>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Visibility="Hidden" Header="id" Width="*" Binding="{Binding Path=id}" ElementStyle="{StaticResource WrapText}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Название" Width="*" Binding="{Binding Path=serv_name}" ElementStyle="{StaticResource WrapText}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Описание" Width="*" Binding="{Binding Path=about}" ElementStyle="{StaticResource WrapText}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Цена" Width="*" Binding="{Binding Path=price}" ElementStyle="{StaticResource WrapText}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Дата создания" Width="*" Binding="{Binding Path=date}" ></DataGridTextColumn>
+                                <DataGridTemplateColumn Header="Действие" Width="*">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Click="Button_Click_1">Изменить</Button>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+
+                    </Grid>
+                </TabItem.Content>
+            </TabItem>
             <TabItem Header="Маркетинг" ></TabItem>
 
         </TabControl>
+
         <Canvas>
             <Button  Canvas.Bottom="0" Canvas.Left="0" Width="102" Height="40" Content="Exit" Click="Button_Click"></Button>
+            <Button Content="Перезагрузить" Canvas.Left="388" Canvas.Top="364" HorizontalAlignment="Center" Height="40" VerticalAlignment="Top" Click="Button_Click_2"  Width="92"/>
+            <Button Content="Добавить" Canvas.Left="115" Canvas.Top="10" HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="92"/>
         </Canvas>
     </Grid>
-    
+
 </Page>
