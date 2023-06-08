@@ -1,9 +1,11 @@
-﻿using Npgsql;
+﻿using Microsoft.Win32;
+using Npgsql;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Runtime.Remoting.Contexts;
@@ -25,9 +27,10 @@ namespace Model_eTOM
     /// </summary>
     public partial class Forecast : Window
     {
+        public BitmapImage chartBitmap = new BitmapImage();
         string connectPostgre = ConfigurationManager.ConnectionStrings["ConnectBD"].ConnectionString;
         private NpgsqlConnection connecting;
-        public string idData { get; set; }
+        public string IdData { get; set; }
 
         public Forecast()
         {
@@ -35,7 +38,6 @@ namespace Model_eTOM
         }
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-
             connecting = new NpgsqlConnection(connectPostgre);
             Data_Upload();
         }
@@ -77,11 +79,12 @@ namespace Model_eTOM
                 string sql = @"
                    SELECT *
                    FROM public.""Marketing""
-                   WHERE id = " + idData + ";";
+                   WHERE id = " + IdData + ";";
                 NpgsqlCommand cmd = new NpgsqlCommand(sql, connecting);
                 NpgsqlDataAdapter iAdapter = new NpgsqlDataAdapter(cmd);
                 DataTable iDataSet = new DataTable();
                 iAdapter.Fill(iDataSet);
+                connecting.Close();
                 DataRow[] data_row = iDataSet.Select();
                 DateTime dateStart = (DateTime)data_row[0]["date_start"];
                 DateTime dateEndVisible = (DateTime)data_row[0]["date_end"];
@@ -178,7 +181,7 @@ namespace Model_eTOM
 
 
                 // Создаем BitmapImage из полученных байтов и устанавливаем его в качестве источника изображения для элемента Image
-                BitmapImage chartBitmap = new BitmapImage();
+               
                 chartBitmap.BeginInit();
                 chartBitmap.StreamSource = new System.IO.MemoryStream(imageBytes);
                 chartBitmap.EndInit();
@@ -190,10 +193,33 @@ namespace Model_eTOM
                 connecting.Close();
                 MessageBox.Show("Error: " + ex.Message);
             }
-
-
-
         }
 
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Изображения (*.png)|*.png|Все файлы (*.*)|*.*";
+            saveFileDialog.Title = "Сохранить изображение";
+            saveFileDialog.FileName = "Прогноз компании №"+IdData + ".png";
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                string filePath = saveFileDialog.FileName;
+
+                using (FileStream fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    PngBitmapEncoder encoder = new PngBitmapEncoder();
+                    encoder.Frames.Add(BitmapFrame.Create(chartBitmap));
+                    encoder.Save(fileStream);
+                }
+
+                MessageBox.Show("Изображение успешно сохранено.", "Сохранение");
+            }
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
     }
 }

@@ -55,6 +55,10 @@
             <Setter Property="Foreground" Value="#FFF9F3"></Setter>
             <Setter Property="BorderThickness" Value="0"></Setter>
         </Style>
+        <Style x:Key="SearchBox" TargetType="TextBox">
+            <Setter Property="Foreground" Value="Black"></Setter>
+            <Setter Property="BorderThickness" Value="0"></Setter>
+        </Style>
         <Style x:Key="InputBox"  TargetType="TextBox">
             <Setter Property="Foreground" Value="#2C4370"></Setter>
         </Style>
@@ -138,8 +142,20 @@
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="{TemplateBinding BorderThickness}"
                                 CornerRadius="20">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Cursor" Value="Hand" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="RenderTransform">
+                                    <Setter.Value>
+                                        <ScaleTransform ScaleX="0.95" ScaleY="0.95" />
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -148,6 +164,10 @@
             <Setter Property="Width" Value="40"/>
             <Setter Property="Height" Value="40"/>
             <Setter Property="FontSize" Value="40"/>
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="0, -2, 0, 0"/>
         </Style>
     </Application.Resources>
 </Application>

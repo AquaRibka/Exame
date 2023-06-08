@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Model_eTOM.Add"
         mc:Ignorable="d"
+        Loaded="Window_Loaded"
         Title="Eqp_add" Height="450" Width="800" Style="{StaticResource WindowStyle}">
     <Grid>
         <Grid.RowDefinitions>
@@ -32,13 +33,13 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
             <ColumnDefinition Width="0.3*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <TextBox Text="Название" Grid.Row="0" Grid.Column="1" Style="{StaticResource TextBoxModule}"/>
+        <TextBox x:Name="name" Text="Название" Grid.Row="0" Grid.Column="1" Style="{StaticResource TextBoxModule}"/>
         <TextBlock Text="Категория:" HorizontalAlignment="Stretch" TextAlignment="Center" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource Header}"/>
         <ComboBox x:Name="Category" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" DisplayMemberPath="Display"/>
         <TextBlock Text="Внутренний номер документа:" HorizontalAlignment="Stretch" TextAlignment="Center" Grid.Row="2" Grid.Column="4" Grid.ColumnSpan="2" Style="{StaticResource Header}"/>
-        <TextBox x:Name="Interial_number"  Grid.Row="3" Grid.Column="4" Grid.ColumnSpan="2" Style="{StaticResource InputBox}"/>
+        <ComboBox x:Name="doc"  Grid.Row="3" Grid.Column="4" Grid.ColumnSpan="2" DisplayMemberPath="Display"></ComboBox>
         <TextBlock Text="Ответственный:" HorizontalAlignment="Stretch" TextAlignment="Center" Grid.Row="2" Grid.Column="7" Grid.ColumnSpan="2" Style="{StaticResource Header}"/>
-        <TextBox x:Name="Responsible" Grid.Row="3" Grid.Column="7" Grid.ColumnSpan="2" Style="{StaticResource InputBox}"/>
+        <ComboBox x:Name="Responsible" Grid.Row="3" Grid.Column="7" Grid.ColumnSpan="2" DisplayMemberPath="Display"></ComboBox>
         <TextBlock Text="Место покупки:" HorizontalAlignment="Stretch" TextAlignment="Center" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource Header}"/>
         <TextBox x:Name="Buy_place" Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource InputBox}"/>
         <TextBlock Text="Срок использования:" HorizontalAlignment="Stretch" TextAlignment="Center" Grid.Row="5" Grid.Column="4" Grid.ColumnSpan="2" Style="{StaticResource Header}"/>
@@ -46,10 +47,11 @@
         <TextBlock Text="ip адрес:" HorizontalAlignment="Stretch" TextAlignment="Center" Grid.Row="5" Grid.Column="7" Grid.ColumnSpan="2" Style="{StaticResource Header}"/>
         <TextBox x:Name="ip" Grid.Row="6" Grid.Column="7" Grid.ColumnSpan="2" Style="{StaticResource InputBox}"/>
         <TextBlock Text="Место расположения:" HorizontalAlignment="Stretch" TextAlignment="Center" Grid.Row="8" Grid.Column="4" Grid.ColumnSpan="2" Style="{StaticResource Header}"/>
-        <ComboBox x:Name="Cabinet" Grid.Row="9" Grid.Column="4" Grid.ColumnSpan="2"/>
-        <Button Content="Добавить" Grid.Row="10" Grid.Column="2"></Button>
-        <Button Content="Очистить" Grid.Row="10" Grid.Column="4" Grid.ColumnSpan="2"></Button>
-        <Button Content="Отменить" Grid.Row="10" Grid.Column="7"></Button>
-        <Button Content="Удалить" Grid.Row="10" Grid.Column="7" Visibility="Collapsed"></Button>
+        <ComboBox x:Name="Cabinet" Grid.Row="9" Grid.Column="4" Grid.ColumnSpan="2" DisplayMemberPath="Display"/>
+        <Button Content="Добавить" Grid.Row="10" Grid.Column="2" x:Name="AddButton" Click="AddButton_Click"></Button>
+        <Button Grid.Row="10" Grid.Column="2" x:Name="EditButton" Content="Изменить" Visibility="Collapsed" Click="Edit"></Button>
+        <Button Content="Очистить" Grid.Row="10" Grid.Column="4" Grid.ColumnSpan="2" Click="Clear"></Button>
+        <Button Content="Отменить" Grid.Row="10" Grid.Column="7" x:Name="Cancel" Click="Cancel_Click"></Button>
+        <Button Content="Удалить" Grid.Row="10" Grid.Column="7" x:Name="Del" Click="Del_Click" Visibility="Collapsed"></Button>
     </Grid>
 </Window>

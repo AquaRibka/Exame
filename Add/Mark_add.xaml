@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Model_eTOM.Add"
         mc:Ignorable="d"
+        Loaded="Window_Loaded"
         Title="Mark_add" Height="500" Width="800" Style="{StaticResource WindowStyle}">
     <Grid>
         <Grid.RowDefinitions>
@@ -13,7 +14,8 @@
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="1.5*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="1.5*"></RowDefinition>
+            <RowDefinition Height="0.5*"></RowDefinition>
+            <RowDefinition Height="0.5*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -29,39 +31,28 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
             <ColumnDefinition Width="0.3*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <TextBox Text="Название" Grid.Row="0" Grid.Column="1" Style="{StaticResource TextBoxModule}"></TextBox>
-        <TextBox Text="Планируемый бюджет" Grid.Row="0" Grid.Column="3" Grid.ColumnSpan="2" Style="{StaticResource TextBoxModule}"></TextBox>
-        <TextBox Text="Сроки" Grid.Row="0" Grid.Column="6" Grid.ColumnSpan="2" Style="{StaticResource TextBoxModule}" ></TextBox>
-        <TextBox Text="Цели" MaxLength="200" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="9" Style="{StaticResource TextBoxModule}" TextAlignment="Justify"></TextBox>
+        <TextBox x:Name="Name" Text="Название" Grid.Row="0" Grid.Column="1" Style="{StaticResource TextBoxModule}"></TextBox>
+        <TextBox x:Name="Budget" Text="Планируемый бюджет" Grid.Row="0" Grid.Column="3" Grid.ColumnSpan="2" Style="{StaticResource TextBoxModule}"></TextBox>
+        <TextBox x:Name="Dates" Text="Сроки" Grid.Row="0" Grid.Column="6" Grid.ColumnSpan="2" Style="{StaticResource TextBoxModule}" ></TextBox>
+        <TextBox x:Name="Target" Text="Цели" MaxLength="200" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="9" Style="{StaticResource TextBoxModule}" TextAlignment="Justify"></TextBox>
         <TextBox Text="План действий" IsReadOnly="True" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="9" Style="{StaticResource TextBoxModule}" TextAlignment="Justify"></TextBox>
-        <ScrollViewer HorizontalScrollBarVisibility="Auto" Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="7" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <Button Content="+" FontSize="25" Grid.Column="9" Grid.Row="2" Click="PlanContainerAdd_Click"></Button>
+        <ScrollViewer HorizontalScrollBarVisibility="Auto" Grid.RowSpan="2" Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="7" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="7*"></ColumnDefinition>
                     <ColumnDefinition Width="*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-
                 <StackPanel Grid.ColumnSpan="2" x:Name="planContainer"/>
                 <StackPanel Grid.Column="1"  x:Name="planContainerButton"/>
             </Grid>
         </ScrollViewer>
-        <TextBox Text="Связанные контракты" IsReadOnly="True" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="9" Style="{StaticResource TextBoxModule}" TextAlignment="Justify"></TextBox>
-        <ScrollViewer HorizontalScrollBarVisibility="Auto" Grid.Row="5" Grid.Column="2" Grid.ColumnSpan="7" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="7*"></ColumnDefinition>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-
-                <StackPanel Grid.ColumnSpan="2" x:Name="contractContainer"/>
-                <StackPanel Grid.Column="1"  x:Name="contractContainerButton"/>
-            </Grid>
-        </ScrollViewer>
-        <Button Click="PlanContainerAdd_Click" HorizontalAlignment="Right" VerticalContentAlignment="Center" Content="+" Padding="10" Width="40" Height="40" Grid.Row="2" Grid.Column="9" FontSize="24"/>
-        <Button Click="ContractContainerAdd_Click" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="9" Content="+" Padding="10" Width="40" Height="40" FontSize="24"></Button>
-        <Button Content="Добавить" Grid.Row="6" Grid.Column="3"></Button>
-        <Button Content="Очистить" Grid.Row="6" Grid.Column="5" Grid.ColumnSpan="2"></Button>
-        <Button Content="Отменить" Grid.Row="6" Grid.Column="8"></Button>
-        <Button Content="Удалить" Grid.Row="6" Grid.Column="8" Visibility="Collapsed"></Button>
+        <TextBlock Style="{StaticResource Header}" Text="Контракт:" Grid.Row="5" Grid.Column="4" Grid.ColumnSpan="3" TextAlignment="Center" ></TextBlock>
+        <ComboBox x:Name="Contract" Text="Связанные контракты"  Grid.Row="6" Grid.Column="4" Grid.ColumnSpan="3"></ComboBox>
+        <Button x:Name="Add" Content="Добавить" Grid.Row="7" Grid.Column="3" Click="Add_Click"></Button>
+        <Button x:Name="Edit" Content="Изменить" Grid.Row="7" Grid.Column="3" Visibility="Collapsed" Click="Edit_Click"></Button>
+        <Button x:Name="Clear" Content="Очистить" Grid.Row="7" Grid.Column="5" Grid.ColumnSpan="2" Click="Clear_Click"></Button>
+        <Button x:Name="Cancel" Content="Отменить" Grid.Row="7" Grid.Column="8" Click="Cancel_Click"></Button>
+        <Button x:Name="Del" Content="Удалить" Grid.Row="7" Grid.Column="8" Visibility="Collapsed" Click="Del_Click"></Button>
     </Grid>
 </Window>

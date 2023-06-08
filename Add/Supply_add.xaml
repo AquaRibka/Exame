@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Model_eTOM.Add"
+        Loaded="Window_Loaded"
         mc:Ignorable="d"
         Title="Supply_add" Height="450" Width="800" Style="{StaticResource WindowStyle}">
     <Grid>
@@ -33,12 +34,13 @@
         <TextBlock Text="Дата: " Grid.Row="1" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" Style="{StaticResource Header}"/>
         <TextBox x:Name="Date"  Grid.Row="2" Grid.Column="3" Style="{StaticResource InputBox}"/>
         <TextBlock Text="Контракт: " Grid.Row="1" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" Style="{StaticResource Header}"/>
-        <TextBox x:Name="Contract" Grid.Row="2" Grid.Column="5" Style="{StaticResource InputBox}"/>
+        <ComboBox x:Name="Contract" Grid.Row="2" Grid.Column="5"/>
         <TextBlock Text="Организация: " Grid.Row="3" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" Style="{StaticResource Header}"/>
-        <TextBox x:Name="Organization" Grid.Row="4" Grid.Column="3" Style="{StaticResource InputBox}"/>
-        <Button Content="Добавить" Grid.Row="6" Grid.Column="1"></Button>
-        <Button Content="Очистить" Grid.Row="6" Grid.Column="3" Grid.ColumnSpan="2"></Button>
-        <Button Content="Отменить" Grid.Row="6" Grid.Column="5"></Button>
-        <Button Content="Удалить" Grid.Row="6" Grid.Column="6" Visibility="Collapsed"></Button>
+        <ComboBox x:Name="Organization" Grid.Row="4" Grid.Column="3"/>
+        <Button  x:Name="AddButton" Content="Добавить" Grid.Row="6" Grid.Column="1" Click="Add"></Button>
+        <Button x:Name="EditButton" Content="Изменить" Grid.Row="6" Grid.Column="1" Click="Edit" Visibility="Collapsed"></Button>
+        <Button Content="Очистить" Grid.Row="6" Grid.Column="3" Grid.ColumnSpan="2" Click="Clear"></Button>
+        <Button x:Name="Cancel" Content="Отменить" Grid.Row="6" Grid.Column="5" Click="Cancel_Click"></Button>
+        <Button x:Name="Del" Content="Удалить" Grid.Row="6" Grid.Column="5" Visibility="Collapsed" Click="Del_Click"></Button>
    </Grid>
 </Window>

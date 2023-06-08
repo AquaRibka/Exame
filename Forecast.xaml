@@ -32,7 +32,7 @@
         <Image x:Name="chartImage" Grid.Column="2" Grid.ColumnSpan="3" Grid.Row="2" Stretch="Uniform" Margin="0,0,0,10" />
         <TextBlock x:Name="Date" Text="Дата проведения: " Margin="10,0,0,0"  Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3" Style="{StaticResource Forecast}"/>
         <TextBlock x:Name="Budget" Text="Бюджет: " Margin="0,0,10,0"  Grid.Row="4" Grid.Column="4" Grid.ColumnSpan="2" Style="{StaticResource Forecast}"/>
-        <Button Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2" Width="Auto" Content="Закрыть"/>
-        <Button Grid.Row="6" Grid.Column="4" Grid.ColumnSpan="2" Width="Auto" Content="Скачать изображение"/>
+        <Button Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2" Width="Auto" Content="Закрыть" Click="Button_Click_1"/>
+        <Button Grid.Row="6" Grid.Column="4" Grid.ColumnSpan="2" Width="Auto" Content="Скачать изображение" Click="Button_Click"/>
     </Grid>
 </Window>

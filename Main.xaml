@@ -2,7 +2,7 @@
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:Model_eTOM"
       mc:Ignorable="d" 
       d:DesignHeight="500" d:DesignWidth="1000"
@@ -38,6 +38,7 @@
             </Setter>
         </Style>
     </Page.Resources>
+    
 
     <TabControl DockPanel.Dock="Top" BorderBrush="#2C4370" TabStripPlacement="Left"  x:Name="TabControl">
         <TabItem x:Name="Services" Header="Услуги" >
@@ -59,11 +60,11 @@
                         <ColumnDefinition Width ="*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
                     
-                    <Button Click="Service_add" Margin="0,5,0,5" Content="Добавить" Grid.RowSpan="2" HorizontalAlignment="Left" Height="40" VerticalAlignment="Center" Width="90"></Button>
+                    <Button Click="Service_add_new" Margin="0,5,0,5" Content="Добавить" Grid.RowSpan="2" HorizontalAlignment="Left" Height="40" VerticalAlignment="Center" Width="90"></Button>
                     <TextBlock HorizontalAlignment="Stretch" TextAlignment="Center" Grid.ColumnSpan="5" Grid.Row="2" Text="Текущие контракты" Foreground="#2C4370"  Background="#FFF9F3" FontSize="24" ></TextBlock>
                     <TextBlock HorizontalAlignment="Stretch" TextAlignment="Center" Grid.Column="1" Grid.Row="0" Text="Выберите параметр:"></TextBlock>                    
                     <TextBlock HorizontalAlignment="Stretch" TextAlignment="Center" Grid.Column="2" Grid.Row="0" Text="Введите значение:"></TextBlock>
-                    <DataGrid Background="#2C4370" AutoGenerateColumns="False" Grid.ColumnSpan="5" Grid.Row="3" x:Name="services" ItemsSource="{Binding Path=DataBD}" CanUserResizeRows="False">
+                    <DataGrid Background="#2C4370" AutoGenerateColumns="False" Grid.ColumnSpan="5" Grid.Row="3" x:Name="services" ItemsSource="{Binding Path=DataBD}" CanUserResizeRows="False" Cursor="">
                         <DataGrid.Resources>
                             <Style TargetType="TextBlock" x:Key="WrapText">
                                 <Setter Property="TextWrapping" Value="Wrap"/>
@@ -78,7 +79,7 @@
                             <DataGridTemplateColumn Header="Действие" Width="*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Margin="0,2,0,2"  Background="#2C4370" Foreground="#FFF9F3">Подробнее</Button>
+                                        <Button Margin="0,2,0,2"  Background="#2C4370" Foreground="#FFF9F3" Click="Service_add">Подробнее</Button>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
 
@@ -86,14 +87,14 @@
                         </DataGrid.Columns>
                     </DataGrid>
                     <ComboBox x:Name="searchServ" IsEditable="False" IsReadOnly="True" Grid.Row="1" Height="20" Width="140" Grid.Column="1" >
-                        <ComboBoxItem Content="Название"></ComboBoxItem>
-                        <ComboBoxItem Content="Цена"></ComboBoxItem>
-                        <ComboBoxItem Content="Дата создания"></ComboBoxItem>
+                        <ComboBoxItem Content="Название"/>
+                        <ComboBoxItem Content="Цена"/>
+                        <ComboBoxItem Content="Дата создания"/>
                     </ComboBox>
-                    <TextBox x:Name="searchTextServ" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Center" Height="20" VerticalAlignment="Center" Width="150"/>
-                    <Button HorizontalAlignment="Left" Content="Поиск" Margin="2,0,0,0" Grid.Column="3" Grid.RowSpan="2"></Button>
-                    <Button Content="Перезагрузить" Margin="2,0,0,0" Grid.Column="2"  Grid.Row="5" Width="120"></Button>
-                    <Button Content="Отчет" Margin="2,0,0,0" Grid.Column="4"  Grid.Row="5" Width="90"></Button>
+                    <TextBox x:Name="searchTextServ" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Center" Height="25" Foreground="Black" VerticalAlignment="Center" Width="150" />
+                    <Button HorizontalAlignment="Left" Content="Поиск" Margin="2,0,0,0" Grid.Column="3" Grid.RowSpan="2" Click="Service_find"></Button>
+                    <Button Content="Перезагрузить" Margin="2,0,0,0" Grid.Column="2"  Grid.Row="5" Width="120" Click="Reload"></Button>
+                    <Button Content="Отчет" Margin="2,0,0,0" Grid.Column="4"  Grid.Row="5" Width="90" Click="Service_report"></Button>
                 </Grid>
             </TabItem.Content>
         </TabItem>
@@ -115,7 +116,7 @@
                         <ColumnDefinition Width ="*"></ColumnDefinition>
                         <ColumnDefinition Width ="*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
-                    <Button Click="Mark_add" Margin="0,5,0,5" Content="Добавить" Grid.RowSpan="2" HorizontalAlignment="Left" Height="40" VerticalAlignment="Center" Width="90"></Button>
+                    <Button Click="Mark_add_new" Margin="0,5,0,5" Content="Добавить" Grid.RowSpan="2" HorizontalAlignment="Left" Height="40" VerticalAlignment="Center" Width="90"></Button>
                     <TextBlock  HorizontalAlignment="Stretch" TextAlignment="Center" Grid.ColumnSpan="5" Grid.Row="2" Text="Текущие рекламные компании" Foreground="#2C4370"  Background="#FFF9F3" FontSize="24" ></TextBlock>
                     <TextBlock HorizontalAlignment="Stretch" TextAlignment="Center" Grid.Column="1" Grid.Row="0" Text="Выберите параметр:" ></TextBlock>
                     <TextBlock HorizontalAlignment="Stretch" TextAlignment="Center" Grid.Column="2" Grid.Row="0" Text="Введите значение:"></TextBlock>
@@ -142,7 +143,7 @@
                             <DataGridTemplateColumn Header="Действие" Width="1.5*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Margin="0,2,0,2" Background="#2C4370" Foreground="#FFF9F3">Подробнее</Button>
+                                        <Button Click="Mark_add" Margin="0,2,0,2" Background="#2C4370" Foreground="#FFF9F3">Подробнее</Button>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
 
@@ -155,11 +156,11 @@
                         <ComboBoxItem Content="Дата начала"></ComboBoxItem>
                         <ComboBoxItem Content="Дата окончания"></ComboBoxItem>
                     </ComboBox>
-                    <TextBox x:Name="searchMarketingText" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Center" Height="20" VerticalAlignment="Center" Width="150"/>
-                    <Button HorizontalAlignment="Left" Content="Поиск" Margin="2,0,0,0" Grid.Column="3" Grid.RowSpan="2"></Button>
+                    <TextBox x:Name="searchMarketingText" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Center" Height="25" VerticalAlignment="Center" Foreground="Black" Width="150"/>
+                    <Button HorizontalAlignment="Left" Content="Поиск" Margin="2,0,0,0" Grid.Column="3" Grid.RowSpan="2" Click="Marketing_find"></Button>
                     <Button Content="Контракты" Click="Contract_2_show" Margin="2,0,0,0" Grid.Column="4"  Grid.RowSpan="2" Width="90"></Button>
-                    <Button Content="Перезагрузить" Margin="2,0,0,0" Grid.Column="2"  Grid.Row="5" Width="120"></Button>
-                    <Button Content="Отчет" Margin="2,0,0,0" Grid.Column="4"  Grid.Row="5" Width="90"></Button>
+                    <Button Content="Перезагрузить" Margin="2,0,0,0" Grid.Column="2"  Grid.Row="5" Width="120" Click="Reload"></Button>
+                    <Button Content="Отчет" Margin="2,0,0,0" Grid.Column="4"  Grid.Row="5" Width="90" Click="Marketing_report"></Button>
                 </Grid>
             </TabItem.Content>
         </TabItem>
@@ -181,7 +182,7 @@
                         <ColumnDefinition Width ="*"></ColumnDefinition>
                         <ColumnDefinition Width ="*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
-                    <Button Margin="0,5,0,5" Content="Добавить" Grid.RowSpan="2" HorizontalAlignment="Left" Height="40" VerticalAlignment="Center" Width="90" Click="Eqp_add"></Button>
+                    <Button Margin="0,5,0,5" Content="Добавить" Grid.RowSpan="2" HorizontalAlignment="Left" Height="40" VerticalAlignment="Center" Width="90" Click="Eqp_add_new"></Button>
                     <TextBlock  HorizontalAlignment="Stretch" TextAlignment="Center" Grid.ColumnSpan="5" Grid.Row="2" Text="Оборудование компании" Foreground="#2C4370"  Background="#FFF9F3" FontSize="24" ></TextBlock>
                     <TextBlock HorizontalAlignment="Stretch" TextAlignment="Center" Grid.Column="1" Grid.Row="0" Text="Выберите параметр:"></TextBlock>
                     <TextBlock HorizontalAlignment="Stretch" TextAlignment="Center" Grid.Column="2" Grid.Row="0" Text="Введите значение:"></TextBlock>
@@ -197,11 +198,18 @@
                             <DataGridTextColumn Header="Название" Width="*" Binding="{Binding Path=name}" ElementStyle="{StaticResource WrapText}"></DataGridTextColumn>
                             <DataGridTextColumn Header="Ответственный" Width="*" Binding="{Binding Path=fio}" ElementStyle="{StaticResource WrapText}"></DataGridTextColumn>
                             <DataGridTextColumn Header="Срок годности" Width="*" Binding="{Binding Path=suitability, StringFormat={}{0:dd.MM.yyyy}}" ></DataGridTextColumn>
-                            <DataGridTextColumn Header="Документ" Width="*" Binding="{Binding Path=doc_number}" ></DataGridTextColumn>
-                            <DataGridTemplateColumn Header="Действие" Width="*">
+                            <DataGridTextColumn Header="Документ" Width="0.5*" Binding="{Binding Path=interior_number}" ></DataGridTextColumn>
+                            <DataGridTemplateColumn Header="Доступ" Width="*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Margin="0,2,0,2"  Background="#2C4370" Foreground="#FFF9F3">Подробнее</Button>
+                                        <Button Margin="0,2,0,2" Content="Подключиться" Click="RemoteConnect" Background="#2C4370" Foreground="#FFF9F3" Width="100"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Действие" Width="1*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Margin="0,2,0,2" Content="Подробнее" Background="#2C4370" Foreground="#FFF9F3" Click="Eqp_add"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -214,10 +222,10 @@
                         <ComboBoxItem Content="Срок годности"></ComboBoxItem>
                         <ComboBoxItem Content="Документ"></ComboBoxItem>
                     </ComboBox>
-                    <TextBox x:Name="searchEquipmentText" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Center" Height="20" VerticalAlignment="Center" Width="150"/>
-                    <Button HorizontalAlignment="Left" Content="Поиск" Margin="2,0,0,0" Grid.Column="3" Grid.RowSpan="2"></Button>
-                    <Button Content="Перезагрузить" Margin="2,0,0,0" Grid.Column="2"  Grid.Row="5" Width="120"></Button>
-                    <Button Content="Отчет" Margin="2,0,0,0" Grid.Column="4"  Grid.Row="5" Width="90"></Button>
+                    <TextBox x:Name="searchEquipmentText" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Center" Height="25" VerticalAlignment="Center" Foreground="Black" Width="150"/>
+                    <Button HorizontalAlignment="Left" Content="Поиск" Margin="2,0,0,0" Grid.Column="3" Grid.RowSpan="2" Click="Equipment_find"></Button>
+                    <Button Content="Перезагрузить" Margin="2,0,0,0" Grid.Column="2"  Grid.Row="5" Width="120" Click="Reload"></Button>
+                    <Button Content="Отчет" Margin="2,0,0,0" Grid.Column="4"  Grid.Row="5" Width="90" Click="Equipment_report"></Button>
                 </Grid>
             </TabItem.Content>
         </TabItem>
@@ -239,7 +247,7 @@
                         <ColumnDefinition Width ="*"></ColumnDefinition>
                         <ColumnDefinition Width ="*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
-                    <Button Margin="0,5,0,5" Click="Contract_add" Content="Добавить" Grid.RowSpan="2" HorizontalAlignment="Left" Height="40" VerticalAlignment="Center" Width="90"></Button>
+                    <Button Margin="0,5,0,5" Click="Contract_add_new" Content="Добавить" Grid.RowSpan="2" HorizontalAlignment="Left" Height="40" VerticalAlignment="Center" Width="90"></Button>
                     <TextBlock  HorizontalAlignment="Stretch" TextAlignment="Center" Grid.ColumnSpan="5" Grid.Row="2" Text="Текущие обязательства" Foreground="#2C4370"  Background="#FFF9F3" FontSize="24" ></TextBlock>
                     <TextBlock HorizontalAlignment="Stretch" TextAlignment="Center" Grid.Column="1" Grid.Row="0" Text="Выберите параметр:"></TextBlock>
                     <TextBlock HorizontalAlignment="Stretch" TextAlignment="Center" Grid.Column="2" Grid.Row="0" Text="Введите значение:"></TextBlock>
@@ -258,7 +266,7 @@
                             <DataGridTemplateColumn Header="Действие" Width="*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Margin="0,2,0,2"  Background="#2C4370" Foreground="#FFF9F3">Подробнее</Button>
+                                        <Button Margin="0,2,0,2"  Background="#2C4370" Foreground="#FFF9F3" Click="Contract_add">Подробнее</Button>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -270,10 +278,10 @@
                         <ComboBoxItem Content="Сумма"></ComboBoxItem>
                         <ComboBoxItem Content="Дата окончания"></ComboBoxItem>
                     </ComboBox>
-                    <TextBox x:Name="searchContracts0Text" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Center" Height="20" VerticalAlignment="Center" Width="150"/>
-                    <Button HorizontalAlignment="Left" Content="Поиск" Margin="2,0,0,0" Grid.Column="3" Grid.RowSpan="2"></Button>
-                    <Button Content="Перезагрузить" Margin="2,0,0,0" Grid.Column="2"  Grid.Row="5" Width="120"></Button>
-                    <Button Content="Отчет" Margin="2,0,0,0" Grid.Column="4"  Grid.Row="5" Width="90"></Button>
+                    <TextBox x:Name="searchContracts0Text" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Center" Height="25" Foreground="Black" VerticalAlignment="Center" Width="150"/>
+                    <Button HorizontalAlignment="Left" Content="Поиск" Margin="2,0,0,0" Grid.Column="3" Grid.RowSpan="2"  Click="Contracts_0_find"></Button>
+                    <Button Content="Перезагрузить" Margin="2,0,0,0" Grid.Column="2"  Grid.Row="5" Width="120" Click="Reload"></Button>
+                    <Button Content="Отчет" Margin="2,0,0,0" Grid.Column="4"  Grid.Row="5" Width="90" Click="Contracts0_report"></Button>
                 </Grid>
             </TabItem.Content>
         </TabItem>
@@ -295,7 +303,7 @@
                         <ColumnDefinition Width ="*"></ColumnDefinition>
                         <ColumnDefinition Width ="*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
-                    <Button Margin="0,5,0,5" Content="Добавить" Click="Supply_add" Grid.RowSpan="2" HorizontalAlignment="Left" Height="40" VerticalAlignment="Center" Width="90"></Button>
+                    <Button Margin="0,5,0,5" Content="Добавить" Click="Supply_add_new" Grid.RowSpan="2" HorizontalAlignment="Left" Height="40" VerticalAlignment="Center" Width="90"></Button>
                     <TextBlock  HorizontalAlignment="Stretch" TextAlignment="Center" Grid.ColumnSpan="5" Grid.Row="2" Text="Поставки" Foreground="#2C4370"  Background="#FFF9F3" FontSize="24" ></TextBlock>
                     <TextBlock HorizontalAlignment="Stretch" TextAlignment="Center" Grid.Column="1" Grid.Row="0" Text="Выберите параметр:"></TextBlock>
                     <TextBlock HorizontalAlignment="Stretch" TextAlignment="Center" Grid.Column="2" Grid.Row="0" Text="Введите значение:"></TextBlock>
@@ -315,7 +323,7 @@
                             <DataGridTemplateColumn Header="Действие" Width="*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Margin="0,2,0,2"  Background="#2C4370" Foreground="#FFF9F3">Подробнее</Button>
+                                        <Button Margin="0,2,0,2"  Background="#2C4370" Foreground="#FFF9F3" Click="Supply_add">Подробнее</Button>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -327,10 +335,10 @@
                         <ComboBoxItem Content="Дата поставки"></ComboBoxItem>
                         <ComboBoxItem Content="Контракт"></ComboBoxItem>
                     </ComboBox>
-                    <TextBox x:Name="searchSupplyText" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Center" Height="20" VerticalAlignment="Center" Width="150"/>
+                    <TextBox x:Name="searchSupplyText" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Center" Height="25" VerticalAlignment="Center" Width="150"/>
                     <Button HorizontalAlignment="Left" Content="Поиск" Margin="2,0,0,0" Grid.Column="3" Grid.RowSpan="2" Click="Supply_find"></Button>
-                    <Button Content="Перезагрузить" Margin="2,0,0,0" Grid.Column="2"  Grid.Row="5" Width="120"></Button>
-                    <Button Content="Отчет" Margin="2,0,0,0" Grid.Column="4"  Grid.Row="5" Width="90"></Button>
+                    <Button Content="Перезагрузить" Margin="2,0,0,0" Grid.Column="2"  Grid.Row="5" Width="120" Click="Reload"></Button>
+                    <Button Content="Отчет" Margin="2,0,0,0" Grid.Column="4" Click="Supply_report" Grid.Row="5" Width="90"></Button>
                 </Grid>
             </TabItem.Content>
         </TabItem>
@@ -352,7 +360,7 @@
                         <ColumnDefinition Width ="*"></ColumnDefinition>
                         <ColumnDefinition Width ="*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
-                    <Button Margin="0,5,0,5" Click="Contract_add" Content="Добавить" Grid.RowSpan="2" HorizontalAlignment="Left" Height="40" VerticalAlignment="Center" Width="90"></Button>
+                    <Button Margin="0,5,0,5" Click="Contract_add_new" Content="Добавить" Grid.RowSpan="2" HorizontalAlignment="Left" Height="40" VerticalAlignment="Center" Width="90"></Button>
                     <TextBlock  HorizontalAlignment="Stretch" TextAlignment="Center" Grid.ColumnSpan="5" Grid.Row="2" Text="Рекламные контракты"  Foreground="#2C4370"  Background="#FFF9F3" FontSize="24" ></TextBlock>
                     <TextBlock HorizontalAlignment="Stretch" TextAlignment="Center" Grid.Column="1" Grid.Row="0" Text="Выберите параметр:"></TextBlock>
                     <TextBlock HorizontalAlignment="Stretch" TextAlignment="Center" Grid.Column="2" Grid.Row="0" Text="Введите значение:"></TextBlock>
@@ -371,7 +379,7 @@
                             <DataGridTemplateColumn Header="Действие" Width="*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Margin="0,2,0,2"  Background="#2C4370" Foreground="#FFF9F3">Подробнее</Button>
+                                        <Button Margin="0,2,0,2"  Background="#2C4370" Foreground="#FFF9F3" Click="Contract_add">Подробнее</Button>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -383,10 +391,10 @@
                         <ComboBoxItem Content="Сумма"></ComboBoxItem>
                         <ComboBoxItem Content="Дата окончания"></ComboBoxItem>
                     </ComboBox>
-                    <TextBox x:Name="searchContracts2Text" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Center" Height="20" VerticalAlignment="Center" Width="150"/>
-                    <Button HorizontalAlignment="Left" Content="Поиск" Margin="2,0,0,0" Grid.Column="3" Grid.RowSpan="2"></Button>
-                    <Button Content="Перезагрузить" Margin="2,0,0,0" Grid.Column="2"  Grid.Row="5" Width="120"></Button>
-                    <Button Content="Отчет" Margin="2,0,0,0" Grid.Column="4"  Grid.Row="5" Width="90"></Button>
+                    <TextBox x:Name="searchContracts2Text" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Center" Height="25" Foreground="Black" VerticalAlignment="Center" Width="150"/>
+                    <Button HorizontalAlignment="Left" Content="Поиск" Margin="2,0,0,0" Grid.Column="3" Grid.RowSpan="2" Click="Contracts_2_find"></Button>
+                    <Button Content="Перезагрузить" Margin="2,0,0,0" Grid.Column="2"  Grid.Row="5" Width="120" Click="Reload"></Button>
+                    <Button Content="Отчет" Margin="2,0,0,0" Grid.Column="4"  Grid.Row="5" Width="90" Click="Contracts2_report"></Button>
                     <Button Content="Назад" Margin="2,0,0,0" Grid.Column="4"  Grid.RowSpan="2" Width="90" Click="Mark_back"></Button>
                 </Grid>
             </TabItem.Content>

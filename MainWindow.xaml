@@ -6,6 +6,8 @@
         xmlns:local="clr-namespace:Model_eTOM"
         mc:Ignorable="d"
         Title="MainWindow" MinHeight="600" Height="600" MinWidth="1100" Width="1100">
+    
+    
     <Frame Name="MainFrame" Background="#2C4370" NavigationUIVisibility="Hidden">
     </Frame>
 </Window>

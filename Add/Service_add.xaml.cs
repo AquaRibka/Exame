@@ -1,9 +1,15 @@
-﻿using Npgsql;
+﻿using Newtonsoft.Json.Linq;
+using Npgsql;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
+using System.Diagnostics.Contracts;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -13,6 +19,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using static Dropbox.Api.TeamLog.FedExtraDetails;
 
 namespace Model_eTOM.Add
 {
@@ -23,6 +30,7 @@ namespace Model_eTOM.Add
     {
         string connectPostgre = ConfigurationManager.ConnectionStrings["ConnectBD"].ConnectionString;
         private NpgsqlConnection connecting;
+        public string IdData { get; set; }
         public Service_add()
         {
             connecting = new NpgsqlConnection(connectPostgre);
@@ -30,7 +38,7 @@ namespace Model_eTOM.Add
             SpeedBox.ItemsSource = speed;
             Channels.ItemsSource = boolchouse;
             Cinema.ItemsSource = boolchouse;
-            MobileConnection.ItemsSource = boolchouse;
+            mobileConnection.ItemsSource = boolchouse;
             Video.ItemsSource = boolchouse;
             Equipment.ItemsSource = boolchouse;
         }
@@ -64,6 +72,340 @@ namespace Model_eTOM.Add
          new BoolFind { Value = false, Display = "Нет"}
         };
 
-        
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            Data_Upload();
+        }
+        private void Data_Upload()
+        {
+            if (IdData != null)
+            {
+                if (!string.IsNullOrEmpty(IdData))
+                {
+                    Cancel.Visibility = Visibility.Collapsed;
+                    Del.Visibility = Visibility.Visible;
+                    AddButton.Visibility = Visibility.Collapsed;
+                    EditButton.Visibility = Visibility.Visible;
+                    try
+                    {
+                        connecting.Open();
+                        string sql = @"
+                           SELECT * FROM public.""Services""
+                           WHERE id = " + IdData + ";";
+                        NpgsqlCommand cmd = new NpgsqlCommand(sql, connecting);
+                        NpgsqlDataAdapter iAdapter = new NpgsqlDataAdapter(cmd);
+                        DataTable iDataTable = new DataTable();
+                        iAdapter.Fill(iDataTable);
+                        foreach (DataRow row in iDataTable.Rows)
+                        {
+                            if (!row.IsNull("channels")) // Проверка, что значение не является NULL
+                            {
+                                string value = row["channels"].ToString(); // Получаем значение из определенного столбца
+
+                                foreach (BoolFind item in Channels.Items)
+                                {
+                                    if (item.Value.ToString() == value)
+                                    {
+                                        Channels.SelectedItem = item; // Устанавливаем элемент в качестве выбранного
+                                        break;
+                                    }
+                                }
+                            }
+                            if (!row.IsNull("cinema")) // Проверка, что значение не является NULL
+                            {
+                                string value = row["cinema"].ToString(); // Получаем значение из определенного столбца
+
+                                foreach (BoolFind item in Cinema.Items)
+                                {
+                                    if (item.Value.ToString() == value)
+                                    {
+                                        Cinema.SelectedItem = item; // Устанавливаем элемент в качестве выбранного
+                                        break;
+                                    }
+                                }
+                            }
+                            if (!row.IsNull("mobile_connection")) // Проверка, что значение не является NULL
+                            {
+                                string value = row["mobile_connection"].ToString(); // Получаем значение из определенного столбца
+
+                                foreach (BoolFind item in mobileConnection.Items)
+                                {
+                                    if (item.Value.ToString() == value)
+                                    {
+                                        mobileConnection.SelectedItem = item; // Устанавливаем элемент в качестве выбранного
+                                        break;
+                                    }
+                                }
+                            }
+                            if (!row.IsNull("equipment")) // Проверка, что значение не является NULL
+                            {
+                                string value = row["equipment"].ToString(); // Получаем значение из определенного столбца
+
+                                foreach (BoolFind item in Equipment.Items)
+                                {
+                                    if (item.Value.ToString() == value)
+                                    {
+                                        Equipment.SelectedItem = item; // Устанавливаем элемент в качестве выбранного
+                                        break;
+                                    }
+                                }
+                            }
+                            if (!row.IsNull("video")) // Проверка, что значение не является NULL
+                            {
+                                string value = row["video"].ToString(); // Получаем значение из определенного столбца
+
+                                foreach (BoolFind item in Video.Items)
+                                {
+                                    if (item.Value.ToString() == value)
+                                    {
+                                        Video.SelectedItem = item; // Устанавливаем элемент в качестве выбранного
+                                        break;
+                                    }
+                                }
+                            } 
+                            if (!row.IsNull("speed")) // Проверка, что значение не является NULL
+                            {
+                                string value = row["speed"].ToString(); // Получаем значение из определенного столбца
+
+                                foreach (Speed item in SpeedBox.Items)
+                                {
+                                    if (item.Value.ToString() == value)
+                                    {
+                                        SpeedBox.SelectedItem = item; // Устанавливаем элемент в качестве выбранного
+                                        break;
+                                    }
+                                }
+                            }
+                            if (!row.IsNull("serv_name")) // Проверка, что значение не является NULL
+                            {
+                                name.Text = row["serv_name"].ToString().TrimEnd();
+                            }
+                            if (!row.IsNull("about")) // Проверка, что значение не является NULL
+                            {
+                                about.Text = row["about"].ToString().TrimEnd();
+                            }
+                            if (!row.IsNull("price")) // Проверка, что значение не является NULL
+                            {
+                                price.Text = row["price"].ToString().TrimEnd();
+                            }
+                        }
+                        connecting.Close();
+                    }
+                    catch (Exception ex)
+                    {
+                        connecting.Close();
+                        MessageBox.Show("Error: " + ex.Message);
+                    }
+                }
+                else
+                {
+                    Cancel.Visibility = Visibility.Visible;
+                    Del.Visibility = Visibility.Collapsed;
+                }
+            }
+        }
+        private void Clear_Click(object sender, RoutedEventArgs e)
+        {
+            Channels.SelectedItem = null;
+            Cinema.SelectedItem = null;
+            mobileConnection.SelectedItem = null;
+            Equipment.SelectedItem = null;
+            Video.SelectedItem = null;
+            SpeedBox.SelectedItem = null;
+            name.Text = null;
+            about.Text = null;
+            price.Text = null;
+        }
+        private void Cancel_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        private void Del_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult result = MessageBox.Show("Вы уверены, что хотите удалить эти данные?", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.No)
+            {
+                return;
+            }
+            try
+            {
+                connecting.Open();
+                string sql = "DELETE FROM public.\"Services\" WHERE id = " + IdData + ";";
+                NpgsqlCommand cmd = new NpgsqlCommand(sql, connecting);
+
+                int rowsAffected = cmd.ExecuteNonQuery();
+
+                if (rowsAffected > 0)
+                {
+                    MessageBox.Show("Запись успешно удалена.");
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Не удалось найти запись с указанным идентификатором.");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Ошибка при удалении данных: " + ex.Message);
+            }
+        }
+
+        private void EditButton_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult result = MessageBox.Show("Вы уверены, что хотите внести изменения?", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.No)
+            {
+                return;
+            }
+            if (Channels.SelectedItem == null)
+            {
+                MessageBox.Show("Выберите категорию");
+                return;
+            }
+            else if (Cinema.SelectedItem == null)
+            {
+                MessageBox.Show("Выберите ответственного");
+                return;
+            }
+            else if (mobileConnection.SelectedItem == null)
+            {
+                MessageBox.Show("Выберите кабинет");
+                return;
+            }
+            else if (Equipment.SelectedItem == null)
+            {
+                MessageBox.Show("Выберите документ");
+                return;
+            }
+            else if (Video.SelectedItem == null)
+            {
+                MessageBox.Show("Выберите документ");
+                return;
+            }
+            else if (SpeedBox.SelectedItem == null)
+            {
+                MessageBox.Show("Выберите документ");
+                return;
+            }
+            else if (name.Text == "")
+            {
+                MessageBox.Show("Проверьте название");
+                return;
+            }
+            else if (about.Text == "")
+            {
+                MessageBox.Show("Проверьте название");
+                return;
+            }
+            else if (price.Text == null || !Regex.IsMatch(price.Text, @"^\d{1,7}([.,]\d{1,2})?$"))
+            {
+                MessageBox.Show("Проверьте поле Срок использования");
+                return;
+            }
+            try
+            {
+                connecting.Open();
+                string sql = @"
+                UPDATE public.""Services""
+                SET cinema = " + (Cinema.SelectedItem as BoolFind)?.Value + ", mobile_connection = " + (mobileConnection.SelectedItem as BoolFind)?.Value + ", equipment = " + (Equipment.SelectedItem as BoolFind)?.Value + ", video = " + (Video.SelectedItem as BoolFind)?.Value + ", channels = " + (Channels.SelectedItem as BoolFind)?.Value + ", speed = " + (SpeedBox.SelectedItem as Speed)?.Value +
+                ", serv_name = '" + name.Text.TrimEnd() + "', about = '" + about.Text.TrimEnd() + "', price = '" + price.Text.Replace('.', ',').TrimEnd()  +
+                "' WHERE id = " + IdData + ";";
+                NpgsqlCommand cmd = new NpgsqlCommand(sql, connecting);
+                int rowsAffected = cmd.ExecuteNonQuery();
+                if (rowsAffected > 0)
+                {
+                    MessageBox.Show("Значения успешно обновлены в базе данных.");
+                }
+                else
+                {
+                    MessageBox.Show("Не удалось обновить значения в базе данных.");
+                }
+
+                connecting.Close();
+            }
+            catch (Exception ex)
+            {
+                connecting.Close();
+                MessageBox.Show("Error: " + ex.Message);
+            }
+        }
+
+        private void AddButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (Channels.SelectedItem == null)
+            {
+                MessageBox.Show("Выберите категорию");
+                return;
+            }
+            else if (Cinema.SelectedItem == null)
+            {
+                MessageBox.Show("Выберите ответственного");
+                return;
+            }
+            else if (mobileConnection.SelectedItem == null)
+            {
+                MessageBox.Show("Выберите кабинет");
+                return;
+            }
+            else if (Equipment.SelectedItem == null)
+            {
+                MessageBox.Show("Выберите документ");
+                return;
+            }
+            else if (Video.SelectedItem == null)
+            {
+                MessageBox.Show("Выберите документ");
+                return;
+            }
+            else if (SpeedBox.SelectedItem == null)
+            {
+                MessageBox.Show("Выберите документ");
+                return;
+            }
+            else if (name.Text == "")
+            {
+                MessageBox.Show("Проверьте название");
+                return;
+            }
+            else if (about.Text == "")
+            {
+                MessageBox.Show("Проверьте название");
+                return;
+            }
+            else if (price.Text == null || !Regex.IsMatch(price.Text, @"^\d{1,7}([.,]\d{1,2})?$"))
+            {
+                MessageBox.Show("Проверьте поле Срок использования");
+                return;
+            }
+            try
+            {
+                connecting.Open();
+                string sql = @"
+            INSERT INTO public.""Services"" (cinema, mobile_connection, equipment, video, channels, speed, serv_name, about, price)
+            VALUES (" + (Cinema.SelectedItem as BoolFind)?.Value + ", " + (mobileConnection.SelectedItem as BoolFind)?.Value + ", " + (Equipment.SelectedItem as BoolFind)?.Value + ", " + (Video.SelectedItem as BoolFind)?.Value + ", " + (Channels.SelectedItem as BoolFind)?.Value + ", "+ (SpeedBox.SelectedItem as Speed)?.Value + ", '"+ name.Text.TrimEnd() + "', '"+ about.Text.TrimEnd() + "', " + price.Text.Replace('.', ',').TrimEnd() + ") RETURNING id;";
+                NpgsqlCommand cmd = new NpgsqlCommand(sql, connecting);
+                int insertedId = (int)cmd.ExecuteScalar();
+                if (insertedId > 0)
+                {
+                    MessageBox.Show("Значения успешно обновлены в базе данных.");
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Не удалось обновить значения в базе данных.");
+                }
+
+                connecting.Close();
+            }
+            catch (Exception ex)
+            {
+                connecting.Close();
+                MessageBox.Show("Error: " + ex.Message);
+            }
+        }
     }
 }

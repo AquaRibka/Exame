@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Model_eTOM.Add"
+        Loaded="Window_Loaded"
         mc:Ignorable="d"
         Title="Contracts_add" Height="450" Width="800" Style="{StaticResource WindowStyle}">
     <Grid>
@@ -29,9 +30,9 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="0.2*"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="Тип: " Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Style="{StaticResource Header}"/>
-            <TextBlock Text="Сумма контракта: " Grid.Row="0" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" Style="{StaticResource Header}"/>
-            <TextBlock Text="Сроки контракта: " Grid.Row="0" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" Style="{StaticResource Header}"/>
+            <TextBlock x:Name="Type" Text="Тип: " Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Style="{StaticResource Header}"/>
+            <TextBlock x:Name="Sum" Text="Сумма контракта: " Grid.Row="0" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" Style="{StaticResource Header}"/>
+            <TextBlock x:Name="Date" Text="Сроки контракта: " Grid.Row="0" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" Style="{StaticResource Header}"/>
         </Grid>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
@@ -45,9 +46,13 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="0.2*"/>
             </Grid.ColumnDefinitions>
-            <TextBox x:Name="Type" Grid.Column="1" Style="{StaticResource InputBox}"/>
-            <TextBox x:Name="Sum" Grid.Row="1" Grid.Column="3" Style="{StaticResource InputBox}"/>
-            <TextBox x:Name="Dates" Grid.Row="1" Grid.Column="5" Style="{StaticResource InputBox}"/>
+            <ComboBox x:Name="type" Grid.Column="1">
+                <ComboBoxItem Tag="0" Content="Обязательство"></ComboBoxItem>
+                <ComboBoxItem Tag="1" Content="Поставки"></ComboBoxItem>
+                <ComboBoxItem Tag="2" Content="Реклама"></ComboBoxItem>
+            </ComboBox>
+            <TextBox x:Name="sum" Grid.Row="1" Grid.Column="3" Style="{StaticResource InputBox}"/>
+            <TextBox x:Name="dates" Grid.Row="1" Grid.Column="5" Style="{StaticResource InputBox}"/>
         </Grid>
         <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
@@ -61,8 +66,8 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="0.2*"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="Организация: " Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Style="{StaticResource Header}"/>
-            <TextBlock Text="Внутренний номер: " Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" Style="{StaticResource Header}"/>
+            <TextBlock x:Name="org"  Text="Организация: " Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Style="{StaticResource Header}"/>
+            <TextBlock x:Name="interial_number" Text="Внутренний номер: " Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" Style="{StaticResource Header}"/>
         </Grid>
         <Grid Grid.Row="4">
             <Grid.ColumnDefinitions>
@@ -76,7 +81,8 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="0.2*"/>
             </Grid.ColumnDefinitions>
-            <TextBox x:Name="Organizastion" Grid.Column="1" Style="{StaticResource InputBox}"/>
+            <ComboBox x:Name="Organizastion" Grid.Column="1">
+            </ComboBox>
             <TextBox x:Name="Interial_number" Grid.Column="3" Style="{StaticResource InputBox}"/>
         </Grid>
         <Grid Grid.Row="5">
@@ -89,7 +95,8 @@
             <Border Grid.Column="1" Grid.ColumnSpan="2" CornerRadius="20" Background="#117B8E" Padding="10,0,0,0" Margin="0,10,0,10">
                 <TextBlock Text="Контракт" Foreground="#FFF9F3" VerticalAlignment="Center" FontSize="16"/>
             </Border>
-            <Button Content="Загрузить" Grid.Column="2" Background="#2C4370" Margin="0,15,0,15" Foreground="#FFF9F3" Height="Auto"/>
+            <TextBlock Grid.Column="1" x:Name="FileNameLabel"  HorizontalAlignment="Right" Foreground="#FFF9F3" FontSize="16" VerticalAlignment="Center"></TextBlock>
+            <Button Content="Загрузить" Grid.Column="2" Background="#2C4370" Click="Add_file" Margin="0,15,0,15" Foreground="#FFF9F3" Height="Auto"/>
         </Grid>
         <Grid Grid.Row="7">
             <Grid.ColumnDefinitions>
@@ -97,11 +104,11 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <Button Content="Добавить" Grid.Column="0"></Button>
-            <Button Content="Очистить" Grid.Column="1"></Button>
-            <Button Content="Отменить" Grid.Column="2"></Button>
-            <Button Content="Удалить" Grid.Column="2" Visibility="Collapsed"></Button>
+            <Button x:Name="AddButton" Content="Добавить" Grid.Column="0" Click="Add"></Button>
+            <Button x:Name="EditButton" Content="Изменить" Grid.Column="0" Click="Edit" Visibility="Collapsed"></Button>
+            <Button Content="Очистить" Grid.Column="1" Click="Clear"></Button>
+            <Button x:Name="Cancel" Content="Отменить" Grid.Column="2" Click="Cancel_Click"></Button>
+            <Button x:Name="Del" Content="Удалить" Grid.Column="2" Visibility="Collapsed" Click="Del_Click"></Button>
         </Grid>
-        
     </Grid>
 </Window>
