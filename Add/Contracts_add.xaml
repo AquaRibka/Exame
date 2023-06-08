@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Model_eTOM.Add"
         Loaded="Window_Loaded"
         mc:Ignorable="d"
-        Title="Contracts_add" Height="450" Width="800" Style="{StaticResource WindowStyle}">
+        Title="Контракт" Height="450" Width="800" Style="{StaticResource WindowStyle}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="0.3*"/>

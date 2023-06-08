@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Model_eTOM.Add"
         Loaded="Window_Loaded"
         mc:Ignorable="d"
-        Title="Supply_add" Height="450" Width="800" Style="{StaticResource WindowStyle}">
+        Title="Поставка" Height="450" Width="800" Style="{StaticResource WindowStyle}">
     <Grid>
         <Grid.ColumnDefinitions>
             

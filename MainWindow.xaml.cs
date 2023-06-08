@@ -25,5 +25,7 @@ namespace Model_eTOM
             InitializeComponent();
             MainFrame.Content = new Main();
         }
+
+
     }
 }

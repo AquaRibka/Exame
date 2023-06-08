@@ -27,7 +27,7 @@ namespace Model_eTOM.Add
     /// </summary>
     public partial class Contracts_add : Window
     {
-        string token = "sl.Bf2uEGT9mSVr89Er9iCUlbLyFSaQtE3LutR6_bspsu3x2WBctm5zSuJuIPoXOjarIDD6mZ2n1euIhzYBXVTBh3YLvgjaLSI-p0dARE7Tt9ietafZGGeobZm-wNRkyhyKGJ7hLKuDS4Jc";
+        string token = "sl.Bf7O3NXjMYAF2JXNjFhgfQTuisbtgThVcQmcCcLk4CSCvV3nsRrHyJorwDuZ2joRv9Do8s6GMjZk3tcaxpavATQgdKkywtM7ugLNwfowS_s4FGANAb806TA9BSwG7ptESaFL1NERKkuW";
         readonly string connectPostgre = ConfigurationManager.ConnectionStrings["ConnectBD"].ConnectionString;
         private NpgsqlConnection connecting;
         string selectedFilePath = string.Empty;

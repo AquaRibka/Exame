@@ -146,7 +146,7 @@ namespace Model_eTOM.Add
                             }
                             if (!row.IsNull("about")) // Проверка, что значение не является NULL
                             {
-                                About.Text = row["about"].ToString();
+                                About.Text = row["about"].ToString().TrimEnd();
                             }
                             if (!row.IsNull("summ")) // Проверка, что значение не является NULL
                             {
@@ -297,24 +297,31 @@ namespace Model_eTOM.Add
             }
             try
             {
-                connecting.Open();
-
                 string sql = @"
-        UPDATE public.""Supply""
-        SET contract_id = " + (Contract.SelectedItem as ComboBoxItem)?.Tag?.ToString() + ", org_id = " + (Organization.SelectedItem as ComboBoxItem)?.Tag?.ToString() + ", about = " + About.Text + ", summ = " + Sum.Text.Replace(',', '.') + ", date = "+ Date.Text.Replace(',', '.') +
-        "WHERE id = " + IdData + ";";
-                NpgsqlCommand cmd = new NpgsqlCommand(sql, connecting);
-                int rowsAffected = cmd.ExecuteNonQuery();
-                if (rowsAffected > 0)
+                    UPDATE public.""Supply""
+                    SET contract_id = @contractId, org_id = @orgId, about = @about, summ = @summ, date = @date
+                    WHERE id = @id;";
+                connecting.Open();
+                using (NpgsqlCommand cmd = new NpgsqlCommand(sql, connecting))
                 {
-                    MessageBox.Show("Значения успешно обновлены в базе данных.");
-                }
-                else
-                {
-                    MessageBox.Show("Не удалось обновить значения в базе данных.");
-                }
+                    cmd.Parameters.AddWithValue("contractId",int.Parse((Contract.SelectedItem as ComboBoxItem)?.Tag?.ToString()));
+                    cmd.Parameters.AddWithValue("orgId", int.Parse((Organization.SelectedItem as ComboBoxItem)?.Tag?.ToString()));
+                    cmd.Parameters.AddWithValue("about", About.Text);
+                    cmd.Parameters.AddWithValue("summ", decimal.Parse(Sum.Text.Replace('.', ',')));
+                    cmd.Parameters.AddWithValue("date", DateTime.Parse(Date.Text.Replace(',', '.')));
+                    cmd.Parameters.AddWithValue("id", int.Parse(IdData));
+                    int rowsAffected = cmd.ExecuteNonQuery();
+                    if (rowsAffected > 0)
+                    {
+                        MessageBox.Show("Значения успешно обновлены в базе данных.");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Не удалось обновить значения в базе данных.");
+                    }
 
-                connecting.Close();
+                    connecting.Close();
+                }
             }
             catch (Exception ex)
             {

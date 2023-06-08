@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Data.SqlClient;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Security.Cryptography;
@@ -220,7 +221,6 @@ namespace Model_eTOM.Add
         {
             this.Close();
         }
-
         private void Del_Click(object sender, RoutedEventArgs e)
         {
             MessageBoxResult result = MessageBox.Show("Вы уверены, что хотите удалить эти данные?", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Question);
@@ -252,7 +252,6 @@ namespace Model_eTOM.Add
                 MessageBox.Show("Ошибка при удалении данных: " + ex.Message);
             }
         }
-
         private void EditButton_Click(object sender, RoutedEventArgs e)
         {
             MessageBoxResult result = MessageBox.Show("Вы уверены, что хотите внести изменения?", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Question);
@@ -309,23 +308,34 @@ namespace Model_eTOM.Add
             try
             {
                 connecting.Open();
-                string sql = @"
-                UPDATE public.""Services""
-                SET cinema = " + (Cinema.SelectedItem as BoolFind)?.Value + ", mobile_connection = " + (mobileConnection.SelectedItem as BoolFind)?.Value + ", equipment = " + (Equipment.SelectedItem as BoolFind)?.Value + ", video = " + (Video.SelectedItem as BoolFind)?.Value + ", channels = " + (Channels.SelectedItem as BoolFind)?.Value + ", speed = " + (SpeedBox.SelectedItem as Speed)?.Value +
-                ", serv_name = '" + name.Text.TrimEnd() + "', about = '" + about.Text.TrimEnd() + "', price = '" + price.Text.Replace('.', ',').TrimEnd()  +
-                "' WHERE id = " + IdData + ";";
-                NpgsqlCommand cmd = new NpgsqlCommand(sql, connecting);
-                int rowsAffected = cmd.ExecuteNonQuery();
-                if (rowsAffected > 0)
+                string sql = @"UPDATE public.""Services""
+                SET cinema = @cinema, mobile_connection = @mobile_connection, equipment = @equipment, video = @video, channels = @channels, speed = @speed,
+                serv_name = @serv_name, about = @about, price = @price
+                WHERE id = @id";
+                using (var command = new NpgsqlCommand(sql, connecting))
                 {
-                    MessageBox.Show("Значения успешно обновлены в базе данных.");
+                    command.Parameters.AddWithValue("@cinema", (Cinema.SelectedItem as BoolFind)?.Value);
+                    command.Parameters.AddWithValue("@mobile_connection", (mobileConnection.SelectedItem as BoolFind)?.Value);
+                    command.Parameters.AddWithValue("@equipment", (Equipment.SelectedItem as BoolFind)?.Value);
+                    command.Parameters.AddWithValue("@video", (Video.SelectedItem as BoolFind)?.Value);
+                    command.Parameters.AddWithValue("@channels", (Channels.SelectedItem as BoolFind)?.Value);
+                    command.Parameters.AddWithValue("@speed", (SpeedBox.SelectedItem as Speed)?.Value);
+                    command.Parameters.AddWithValue("@serv_name", name.Text.TrimEnd());
+                    command.Parameters.AddWithValue("@about", about.Text.TrimEnd());
+                    command.Parameters.AddWithValue("@price", decimal.Parse(price.Text.TrimEnd().Replace('.', ',')));
+                    command.Parameters.AddWithValue("@id", int.Parse(IdData));
+                    int rowsAffected = command.ExecuteNonQuery();
+                    if (rowsAffected > 0)
+                    {
+                        MessageBox.Show("Значения успешно обновлены в базе данных.");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Не удалось обновить значения в базе данных.");
+                    }
+                    connecting.Close();
                 }
-                else
-                {
-                    MessageBox.Show("Не удалось обновить значения в базе данных.");
-                }
-
-                connecting.Close();
+                
             }
             catch (Exception ex)
             {

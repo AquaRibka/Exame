@@ -125,7 +125,7 @@ namespace Model_eTOM.Add
 
             string sql = @"
             INSERT INTO public.""Marketing"" (name, budget, target, contract_id, date_start, date_end, actions)
-            VALUES ('"+name+"', "+budget+", '" + target+"', " + contractId + ", @DateStart, @DateEnd, @Actions) RETURNING id;;";
+            VALUES ('"+name+"', "+budget+", '" +target+"', " + contractId + ", @DateStart, @DateEnd, @Actions) RETURNING id;;";
 
             NpgsqlCommand cmd = new NpgsqlCommand(sql, connecting);
             string[] dateRange = Dates.Text.Split('-');

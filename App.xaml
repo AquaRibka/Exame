@@ -74,15 +74,15 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="TextBox">
                         <Border Background="{TemplateBinding Background}"
-                    BorderBrush="{TemplateBinding BorderBrush}"
-                    BorderThickness="{TemplateBinding BorderThickness}"
-                    CornerRadius="20">
-                            <TextBox Text="{TemplateBinding Text}" 
-                         HorizontalContentAlignment="Center"
-                         VerticalContentAlignment="Center"
-                         Padding="5"
-                         Background="Transparent"
-                         BorderBrush="Transparent"/>
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="20">
+                            <TextBox Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Text, Mode=TwoWay}"
+                            HorizontalContentAlignment="Center"
+                            VerticalContentAlignment="Center"
+                            Padding="5"
+                            Background="Transparent"
+                            BorderBrush="Transparent"/>
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>

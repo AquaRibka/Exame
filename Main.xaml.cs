@@ -1370,5 +1370,10 @@ namespace Model_eTOM
             Supply_table();
             Contract_2_table();
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Process.GetCurrentProcess().Kill();
+        }
     }
 }

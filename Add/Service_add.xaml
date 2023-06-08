@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Model_eTOM.Add"
         mc:Ignorable="d"
         Loaded="Window_Loaded"
-        Title="Service_add" Height="450" Width="800" Style="{StaticResource WindowStyle}">
+        Title="Услуга" Height="450" Width="800" Style="{StaticResource WindowStyle}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
@@ -34,7 +34,7 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
             <ColumnDefinition Width="0.3*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <TextBox x:Name="name"  Text="Название" Grid.Row="0" Grid.Column="1" Style="{StaticResource TextBoxModule}"/>
+        <TextBox x:Name="name"  Text="Название" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource TextBoxModule}"/>
         <TextBox x:Name="about" Text="Описание" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="9" Style="{StaticResource TextBoxModule}" TextAlignment="Justify"/>
         <TextBlock Text="Скорость интернета:" HorizontalAlignment="Stretch" TextAlignment="Center" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource Header}"/>
         <ComboBox x:Name="SpeedBox" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" DisplayMemberPath="Display"/>

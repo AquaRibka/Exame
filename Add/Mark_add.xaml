@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Model_eTOM.Add"
         mc:Ignorable="d"
         Loaded="Window_Loaded"
-        Title="Mark_add" Height="500" Width="800" Style="{StaticResource WindowStyle}">
+        Title="Рекламная компания" Height="500" Width="800" Style="{StaticResource WindowStyle}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
