@@ -33,11 +33,10 @@ namespace Model_eTOM
     /// Логика взаимодействия для Main.xaml
     /// </summary>
     /// 
-
-
-
     public partial class Main : Page
     {
+        
+        int usertype = 0;
         //Переменные для поключения к БД по данным из файла App.config
         readonly string connectPostgre = ConfigurationManager.ConnectionStrings["ConnectBD"].ConnectionString;
         private NpgsqlConnection connecting;
@@ -48,6 +47,27 @@ namespace Model_eTOM
             //Подключение к БД
             connecting = new NpgsqlConnection(connectPostgre);
             InitializeComponent();
+            //Проверка пользователя
+            if (usertype == 6)
+            {
+                Services.Visibility = Visibility.Collapsed;
+                Marketing.Visibility = Visibility.Collapsed;
+                Supply.Visibility = Visibility.Collapsed;
+                Contracts_0.Visibility = Visibility.Collapsed;
+                Contracts_2.Visibility = Visibility.Collapsed;
+            } else if (usertype == 1)
+            {
+                Marketing.Visibility = Visibility.Collapsed;
+                Equipment.Visibility = Visibility.Collapsed;
+            } else if (usertype == 2)
+            {
+                Services.Visibility = Visibility.Collapsed;
+                Equipment.Visibility = Visibility.Collapsed;
+                Supply.Visibility = Visibility.Collapsed;
+                Contracts_0.Visibility = Visibility.Collapsed;
+                Contracts_2.Visibility = Visibility.Collapsed;
+            }
+            //Загрузка таблиц
             Services_table();
             Marketing_table();
             Equipment_table();
@@ -98,7 +118,7 @@ namespace Model_eTOM
                 Adapter.Fill(DataSet, "DataBD");                                            //
                 //Запрет на изменение таблицы marketing
                 marketing.IsReadOnly = true;
-                //Заполнение таблицы services данными, выгруженными из БД
+                //Заполнение таблицы marketing данными, выгруженными из БД
                 marketing.DataContext = DataSet;
                 connecting.Close();
             }
@@ -128,7 +148,7 @@ namespace Model_eTOM
                 Adapter.Fill(DataSet, "DataBD");                                            //
                 //Запрет на изменение таблицы equipment
                 equipment.IsReadOnly = true;
-                //Заполнение таблицы services данными, выгруженными из БД
+                //Заполнение таблицы equipment данными, выгруженными из БД
                 equipment.DataContext = DataSet;
                 connecting.Close();
             }
@@ -154,9 +174,9 @@ namespace Model_eTOM
                 NpgsqlDataAdapter Adapter = new NpgsqlDataAdapter(cmd);                     //  Выгрузка данных из БД и создание DataSet 
                 DataSet DataSet = new DataSet();                                            //  для их хранения
                 Adapter.Fill(DataSet, "DataBD");                                            //
-                //Запрет на изменение таблицы equipment
+                //Запрет на изменение таблицы contracts_0
                 contracts_0.IsReadOnly = true;
-                //Заполнение таблицы services данными, выгруженными из БД
+                //Заполнение таблицы contracts_0 данными, выгруженными из БД
                 contracts_0.DataContext = DataSet;
                 connecting.Close();
             }
@@ -182,9 +202,9 @@ namespace Model_eTOM
                 NpgsqlDataAdapter Adapter = new NpgsqlDataAdapter(cmd);                     //  Выгрузка данных из БД и создание DataSet 
                 DataSet DataSet = new DataSet();                                            //  для их хранения
                 Adapter.Fill(DataSet, "DataBD");                                            //
-                //Запрет на изменение таблицы equipment
+                //Запрет на изменение таблицы supply
                 supply.IsReadOnly = true;
-                //Заполнение таблицы services данными, выгруженными из БД
+                //Заполнение таблицы supply данными, выгруженными из БД
                 supply.DataContext = DataSet;
                 connecting.Close();
             }
@@ -213,7 +233,7 @@ namespace Model_eTOM
 
                 //Запрет на изменение таблицы contracts_2
                 contracts_2.IsReadOnly = true;
-                //Заполнение таблицы services данными, выгруженными из БД
+                //Заполнение таблицы contracts_2 данными, выгруженными из БД
                 contracts_2.DataContext = DataSet;
                 connecting.Close();
             }
@@ -234,41 +254,52 @@ namespace Model_eTOM
         {
             TabControl.SelectedIndex = 1;
         }
-        //Замена текстовго поля на выпадающий список
+        //Открытие окна для редактирования Услуг
         private void Service_add(object sender, RoutedEventArgs e)
         {
             DataRowView rowView = services.SelectedItem as DataRowView;
+            //сохранение идентификатора
             string idData = rowView.Row["id"].ToString();
             Service_add service_Add = new Service_add();
+            //Передача идентификатора
             service_Add.IdData = idData;
             service_Add.Show();
         }
+        //Открытие окна для добавления услуг
         private void Service_add_new(object sender, RoutedEventArgs e)
         {
             Service_add service_Add = new Service_add();
             service_Add.Show();
         }
+        //Открытие окна для редактирования рекламных компаний
         private void Mark_add(object sender, RoutedEventArgs e)
         {
             DataRowView rowView = marketing.SelectedItem as DataRowView;
+            //сохранение идентификатора
             string idData = rowView.Row["id"].ToString();
             Mark_add mark_Add = new Mark_add();
+            //Передача идентификатора
             mark_Add.IdData = idData;
             mark_Add.Show();
         }
+        //Открытие окна для добавления рекламных компаний
         private void Mark_add_new(object sender, RoutedEventArgs e)
         {
             Mark_add mark_Add = new Mark_add();
             mark_Add.Show();
         }
+        //Открытие окна прогноза
         private void ShowForecast(object sender, RoutedEventArgs e)
         {
             DataRowView rowView = marketing.SelectedItem as DataRowView;
+            //сохранение идентификатора
             string idData = rowView.Row["id"].ToString();
-            Forecast forecast = new Forecast();                                                  //Прогноз
+            Forecast forecast = new Forecast();
+            //Передача идентификатора
             forecast.IdData += idData;
             forecast.Show();
         }
+        //Удаленное подключение
         private async void RemoteConnect(object sender, RoutedEventArgs e)
         {
             DataRowView rowView = equipment.SelectedItem as DataRowView;
@@ -287,8 +318,10 @@ namespace Model_eTOM
                 connecting.Close();
                 string ip = "";
                 string status = "";
+                //проверка наличия результатов запроса
                 if (DataSet.Tables["DataBD"].Rows.Count > 0)
                 {
+                    //сохранение результьтатов запроса
                     ip = DataSet.Tables["DataBD"].Rows[0]["ip"].ToString();
                     status = DataSet.Tables["DataBD"].Rows[0]["status_id"].ToString();
                 }
@@ -296,22 +329,29 @@ namespace Model_eTOM
                 {
                     MessageBox.Show("Устройство не поддерживает удаленный доступ");
                 }
+                //проверка доступности устройства
                 if (status == "2")
                 {
                     MessageBox.Show("Устройство в данный момент занято");
                     return;
                 }
-
+                //проверка наличия ip адреса
                 if (!string.IsNullOrWhiteSpace(ip))
                 {
+                    //строка подключения
                     string command = $"/v:{ip} /admin";
+                    //запуск подключения
                     Process process = new Process();
                     process.StartInfo.FileName = "mstsc.exe";
+                    //выполнение команды поключения
                     process.StartInfo.Arguments = command;
                     process.Start();
+                    //Сообщения для Telegram
                     string message = "Вы забронировали устройство "+ DataSet.Tables["DataBD"].Rows[0]["name"].ToString() + " на 60 минут. Через 60 минут управление может быть передано другому пользователю.";
+                    //Отправка сообщения в Telegram
                     await SendMessage("1108697409", message);
                         connecting.Open();
+                    //Бронирование устройства
                         string sql_up = @"
                         UPDATE public.""Equipment"" SET status_id = 2 WHERE public.""Equipment"".id =" + idData + ";";
                         NpgsqlCommand cmd_up = new NpgsqlCommand(sql_up, connecting);
@@ -327,17 +367,21 @@ namespace Model_eTOM
             }
 
         }
+        //Отправка сообщения в Tellegram
         private async Task SendMessage(string chatId, string messageText)
         {
+            //Токен бота
             string botToken = "5928131605:AAEGK63z1Fy_H3xPBbNwRxsOhBOMUOJQ9jU";
-
+            //Запусе Http клиента для отправки запросов
             using (HttpClient client = new HttpClient())
             {
+                //Строка API
                 string apiUrl = $"https://api.telegram.org/bot{botToken}/sendMessage";
+                //Строка подключения
                 var content = new StringContent($"{{\"chat_id\": \"{chatId}\", \"text\": \"{messageText}\"}}", Encoding.UTF8, "application/json");
-
+                //Выполнение запроса
                 HttpResponseMessage response = await client.PostAsync(apiUrl, content);
-
+                //Проверка результатов отправки
                 if (response.IsSuccessStatusCode)
                 {
                     // Сообщение успешно отправлено
@@ -351,44 +395,57 @@ namespace Model_eTOM
                 }
             }
         }
+        //Открытие окна для редактирования оборудования
         private void Eqp_add(object sender, RoutedEventArgs e)
         {
             DataRowView rowView = equipment.SelectedItem as DataRowView;
+            //сохранение идентификатора
             string idData = rowView.Row["id"].ToString();
             Eqp_add eqp_Add = new Eqp_add();
+            //Передача идентификатора
             eqp_Add.IdData = idData;
             eqp_Add.Show();
         }
+        //Открытие окна для добавления оборудования
         private void Eqp_add_new(object sender, RoutedEventArgs e)
         {
             Eqp_add eqp_Add = new Eqp_add();
             eqp_Add.Show();
         }
+        //Открытие окна для редактирования контрактов
         private void Contract_add(object sender, RoutedEventArgs e)
         {
+            //Определение типа контракта
             DataRowView rowView = contracts_0.SelectedItem as DataRowView;
             if (rowView == null)
             {
                 rowView = contracts_2.SelectedItem as DataRowView;
             }
+            //сохранение идентификатора
             string idData = rowView.Row["id"].ToString();
             Contracts_add contract_Add = new Contracts_add();
+            //Передача идентификатора
             contract_Add.IdData += idData;
             contract_Add.Show();
         }
+        //Открытие окна для добавления контрактов
         private void Contract_add_new(object sender, RoutedEventArgs e)
         {
             Contracts_add contract_Add = new Contracts_add();
             contract_Add.Show();
         }
+        //Открытие окна для редактирвоания поставок
         private void Supply_add(object sender, RoutedEventArgs e)
         {
             DataRowView rowView = supply.SelectedItem as DataRowView;
+            //сохранение идентификатора
             string idData = rowView.Row["id"].ToString();
             Supply_add supply_Add = new Supply_add();
+            //Передача идентификатора
             supply_Add.IdData = idData;
             supply_Add.Show();
         }
+        //Открытие окна для добавления поставок
         private void Supply_add_new(object sender, RoutedEventArgs e)
         {
             Supply_add supply_Add = new Supply_add();
@@ -407,6 +464,7 @@ namespace Model_eTOM
             switch (searchSupply.Text)
             {
                 case "Статус":
+                    //Проверка валидности поля
                     bool hasDigits = Regex.IsMatch(searchSupplyText.Text, @"\d");
                     if (hasDigits)
                     {
@@ -414,6 +472,7 @@ namespace Model_eTOM
                     }
                     else
                     {
+                        //Строка с SQL запросом
                         sql = @"
                         SELECT public.""Supply"".id, public.""Supply_status"".name, public.""Supply"".about, public.""Supply"".summ, public.""Supply"".date, public.""Contracts"".interior_number
                         FROM public.""Supply""
@@ -425,10 +484,13 @@ namespace Model_eTOM
                 case "Дата поставки":
                     string inputValue = searchTextServ.Text;
                     DateTime dateValue;
+                    //Проверка валидности поля
                     bool isValidDate = DateTime.TryParseExact(inputValue, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out dateValue);
                     if (isValidDate)
                     {
+                        //Форматирование даты
                         string formattedDate = dateValue.ToString("yyyy-MM-dd");
+                        //Строка с SQL запросом
                         sql = @"
                         SELECT public.""Supply"".id, public.""Supply_status"".name, public.""Supply"".about, public.""Supply"".summ, public.""Supply"".date, public.""Contracts"".interior_number
                         FROM public.""Supply""
@@ -442,6 +504,7 @@ namespace Model_eTOM
                     }
                     break;
                 case "Контракт":
+                    //Строка с SQL запросом
                     sql = @"
                         SELECT public.""Supply"".id, public.""Supply_status"".name, public.""Supply"".about, public.""Supply"".summ, public.""Supply"".date, public.""Contracts"".interior_number
                         FROM public.""Supply""
@@ -450,9 +513,11 @@ namespace Model_eTOM
                         WHERE public.""Supply_status"".interior_number = " + searchSupplyText.Text + ";";
                     break;
                 case "Сумма":
+                    //Проверка валидности поля
                     bool isValidPrice = (Regex.IsMatch(searchTextServ.Text, @"^\d+(\,\d{1,2})?$") || Regex.IsMatch(searchTextServ.Text, @"^\d+(\.\d{1,2})?$"));
                     if (isValidPrice)
                     {
+                        //Строка с SQL запросом
                         sql = @"
                         SELECT public.""Supply"".id, public.""Supply_status"".name, public.""Supply"".about, public.""Supply"".summ, public.""Supply"".date, public.""Contracts"".interior_number
                         FROM public.""Supply""
@@ -492,14 +557,17 @@ namespace Model_eTOM
             switch (searchServ.Text)
             {
                 case "Название":
+                    //Строка с SQL запросом
                     sql = @"
                        SELECT id, price, serv_name, about, date FROM public.""Services""
                         WHERE public.""Services"".serv_name = '" + searchTextServ.Text + "';";
                     break;
                 case "Цена":
+                    //Проверка валидности поля
                     bool isValidPrice = (Regex.IsMatch(searchTextServ.Text, @"^\d+(\,\d{1,2})?$") || Regex.IsMatch(searchTextServ.Text, @"^\d+(\.\d{1,2})?$"));
                     if (isValidPrice)
                     {
+                        //Строка с SQL запросом
                         sql = @"
                         SELECT id, price, serv_name, about, date FROM public.""Services""
                         WHERE public.""Services"".price = '" + searchTextServ.Text.Replace('.', ',') + "';";
@@ -512,9 +580,11 @@ namespace Model_eTOM
                 case "Дата создания":
                     string inputValue = searchTextServ.Text;
                     DateTime dateValue;
+                    //Проверка валидности поля
                     bool isValidDate = DateTime.TryParseExact(inputValue, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out dateValue);
                     if (isValidDate)
                     {
+                        //Строка с SQL запросом
                         string formattedDate = dateValue.ToString("yyyy-MM-dd");
                         sql = @"
                         SELECT id, price, serv_name, about, date FROM public.""Services""
@@ -555,15 +625,17 @@ namespace Model_eTOM
             switch (searchMarketing.Text)
             {
                 case "Название":
+                    //Строка с SQL запросом
                     sql = @"
                        SELECT id, name, budget, date_start, date_end, target FROM public.""Marketing""
                         WHERE public.""Marketing"".name = '" + searchMarketingText.Text + "';";
                     break;
                 case "Бюджет":
+                    //Проверка валидности поля
                     bool isValidPrice = (Regex.IsMatch(searchMarketingText.Text, @"^\d+(\,\d{1,2})?$") || Regex.IsMatch(searchMarketingText.Text, @"^\d+(\.\d{1,2})?$"));
                     if (isValidPrice)
                     {
-
+                        //Строка с SQL запросом
                         sql = @"
                        SELECT id, name, budget, date_start, date_end, target FROM public.""Marketing""
                          WHERE public.""Marketing"".budget = '" + searchMarketingText.Text.Replace('.', ',') + "';";
@@ -575,10 +647,11 @@ namespace Model_eTOM
                     break;
                 case "Дата начала":
                     inputValue = searchMarketingText.Text;
-
+                    //Проверка валидности поля
                     bool isValidDate = DateTime.TryParseExact(inputValue, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out dateValue);
                     if (isValidDate)
                     {
+                        //Строка с SQL запросом
                         string formattedDate = dateValue.ToString("yyyy-MM-dd");
                         sql = @"
                         SELECT id, name, budget, date_start, date_end, target FROM public.""Marketing""
@@ -590,9 +663,11 @@ namespace Model_eTOM
                     }
                     break;
                 case "Окончания":
+                    //Проверка валидности поля
                     bool isValidDateEnd = DateTime.TryParseExact(inputValue, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out dateValue);
                     if (isValidDateEnd)
                     {
+                        //Строка с SQL запросом
                         string formattedDate = dateValue.ToString("yyyy-MM-dd");
                         sql = @"
                        SELECT id, name, budget, date_start, date_end, target FROM public.""Marketing""
@@ -633,6 +708,7 @@ namespace Model_eTOM
             switch (searchEquipment.Text)
             {
                 case "Тип":
+                    //Проверка валидности поля
                     bool hasDigits = Regex.IsMatch(searchSupplyText.Text, @"\d");
                     if (hasDigits)
                     {
@@ -640,6 +716,7 @@ namespace Model_eTOM
                     }
                     else
                     {
+                        //Строка с SQL запросом
                         sql = @"
                        SELECT public.""Equipment"".id, public.""Eqp_category"".cat_name, public.""Equipment"".name, public.""Users"".fio, public.""Equipment"".suitability, public.""Contracts"".interior_number, public.""Equipment"".ip
                     FROM public.""Equipment""
@@ -650,6 +727,7 @@ namespace Model_eTOM
                     }
                     break;
                 case "Название":
+                    //Строка с SQL запросом
                     sql = @"
                       SELECT public.""Equipment"".id, public.""Eqp_category"".cat_name, public.""Equipment"".name, public.""Users"".fio, public.""Equipment"".suitability, public.""Contracts"".interior_number, public.""Equipment"".ip
                     FROM public.""Equipment""
@@ -662,6 +740,7 @@ namespace Model_eTOM
                     bool isOnlyLetters = Regex.IsMatch(searchEquipmentText.Text, @"^[A-Z][a-z]*$");
                     if (isOnlyLetters)
                     {
+                        //Строка с SQL запросом
                         sql = @"
                         SELECT public.""Equipment"".id, public.""Eqp_category"".cat_name, public.""Equipment"".name, public.""Users"".fio, public.""Equipment"".suitability, public.""Contracts"".interior_number, public.""Equipment"".ip
                     FROM public.""Equipment""
@@ -676,10 +755,13 @@ namespace Model_eTOM
                     }
                     break;
                 case "Срок годности":
+                    //Проверка валидности поля
                     bool isValidDateEnd = DateTime.TryParseExact(inputValue, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out dateValue);
                     if (isValidDateEnd)
                     {
+                        //Фомратирование даты
                         string formattedDate = dateValue.ToString("yyyy-MM-dd");
+                        //Строка с SQL запросом
                         sql = @"
                         SELECT public.""Equipment"".id, public.""Eqp_category"".cat_name, public.""Equipment"".name, public.""Users"".fio, public.""Equipment"".suitability, public.""Contracts"".interior_number, public.""Equipment"".ip
                     FROM public.""Equipment""
@@ -694,9 +776,11 @@ namespace Model_eTOM
                     }
                     break;
                 case "Документ":
+                    //Проверка валидности поля
                     bool isValidDock = Regex.IsMatch(searchEquipmentText.Text, @"\d");
                     if (isValidDock)
                     {
+                        //Строка с SQL запросом
                         sql = @"
                        SELECT public.""Equipment"".id, public.""Eqp_category"".cat_name, public.""Equipment"".name, public.""Users"".fio, public.""Equipment"".suitability, public.""Contracts"".interior_number, public.""Equipment"".ip
                     FROM public.""Equipment""
@@ -738,9 +822,11 @@ namespace Model_eTOM
             switch (searchContracts0.Text)
             {
                 case "Номер":
+                    //Проверка валидности поля
                     bool hasDigits = Regex.IsMatch(searchContracts0Text.Text, @"\d");
                     if (hasDigits)
                     {
+                        //Строка с SQL запросом
                         sql = @"
                        SELECT public.""Contracts"".id, public.""Contracts"".interior_number, public.""Organization"".name, public.""Contracts"".sum, public.""Contracts"".date_end
                     FROM public.""Contracts""
@@ -754,6 +840,7 @@ namespace Model_eTOM
                     }
                     break;
                 case "Организация":
+                    //Строка с SQL запросом
                     sql = @"
                       SELECT public.""Contracts"".id, public.""Contracts"".interior_number, public.""Organization"".name, public.""Contracts"".sum, public.""Contracts"".date_end
                     FROM public.""Contracts""
@@ -761,9 +848,11 @@ namespace Model_eTOM
                     WHERE public.""Contracts"".type_id = 0 AND public.""Organization"".name = '" + searchContracts0Text.Text + "';";
                     break;
                 case "Сумма":
+                    //Проверка валидности поля
                     bool isValidPrice = (Regex.IsMatch(searchContracts0Text.Text, @"^\d+(\,\d{1,2})?$") || Regex.IsMatch(searchContracts0Text.Text, @"^\d+(\.\d{1,2})?$"));
                     if (isValidPrice)
                     {
+                        //Строка с SQL запросом
                         sql = @"
                        SELECT public.""Contracts"".id, public.""Contracts"".interior_number, public.""Organization"".name, public.""Contracts"".sum, public.""Contracts"".date_end
                     FROM public.""Contracts""
@@ -778,10 +867,13 @@ namespace Model_eTOM
                 case "Дата окончания":
                     string inputValue = searchContracts0Text.Text;
                     DateTime dateValue;
+                    //Проверка валидности поля
                     bool isValidDate = DateTime.TryParseExact(inputValue, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out dateValue);
                     if (isValidDate)
                     {
+                        //Форматирование даты
                         string formattedDate = dateValue.ToString("yyyy-MM-dd");
+                        //Строка с SQL запросом
                         sql = @"
                         SELECT public.""Contracts"".id, public.""Contracts"".interior_number, public.""Organization"".name, public.""Contracts"".sum, public.""Contracts"".date_end
                     FROM public.""Contracts""
@@ -823,9 +915,11 @@ namespace Model_eTOM
             switch (searchContracts2.Text)
             {
                 case "Номер":
+                    //Проверка валидности поля
                     bool hasDigits = Regex.IsMatch(searchContracts2Text.Text, @"\d");
                     if (hasDigits)
                     {
+                        //Строка с SQL запросом
                         sql = @"
                        SELECT public.""Contracts"".id, public.""Contracts"".interior_number, public.""Organization"".name, public.""Contracts"".sum, public.""Contracts"".date_end
                     FROM public.""Contracts""
@@ -839,6 +933,7 @@ namespace Model_eTOM
                     }
                     break;
                 case "Организация":
+                    //Строка с SQL запросом
                     sql = @"
                       SELECT public.""Contracts"".id, public.""Contracts"".interior_number, public.""Organization"".name, public.""Contracts"".sum, public.""Contracts"".date_end
                     FROM public.""Contracts""
@@ -846,9 +941,11 @@ namespace Model_eTOM
                     WHERE public.""Contracts"".type_id = 2 AND public.""Organization"".name = '" + searchContracts2Text.Text + "';";
                     break;
                 case "Сумма":
+                    //Проверка валидности поля
                     bool isValidPrice = (Regex.IsMatch(searchContracts2Text.Text, @"^\d+(\,\d{1,2})?$") || Regex.IsMatch(searchContracts2Text.Text, @"^\d+(\.\d{1,2})?$"));
                     if (isValidPrice)
                     {
+                        //Строка с SQL запросом
                         sql = @"
                        SELECT public.""Contracts"".id, public.""Contracts"".interior_number, public.""Organization"".name, public.""Contracts"".sum, public.""Contracts"".date_end
                     FROM public.""Contracts""
@@ -863,10 +960,13 @@ namespace Model_eTOM
                 case "Дата окончания":
                     string inputValue = searchContracts2Text.Text;
                     DateTime dateValue;
+                    //Проверка валидности поля
                     bool isValidDate = DateTime.TryParseExact(inputValue, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out dateValue);
                     if (isValidDate)
                     {
+                        //Форматирование даты
                         string formattedDate = dateValue.ToString("yyyy-MM-dd");
+                        //Строка с SQL запросом
                         sql = @"
                         SELECT public.""Contracts"".id, public.""Contracts"".interior_number, public.""Organization"".name, public.""Contracts"".sum, public.""Contracts"".date_end
                     FROM public.""Contracts""
@@ -907,7 +1007,7 @@ namespace Model_eTOM
                 DataTable ct = new DataTable();
                 Adapter.Fill(ct);
                 connecting.Close();
-
+                //Открытие приложения
                 Excel.Application objExcel = new Excel.Application();
                 Excel.Workbook workbook = objExcel.Workbooks.Add();
                 Excel.Worksheet sheet = workbook.ActiveSheet;
@@ -987,7 +1087,7 @@ namespace Model_eTOM
                 DataTable ct = new DataTable();
                 Adapter.Fill(ct);
                 connecting.Close();
-
+                //Открытие приложения
                 Excel.Application objExcel = new Excel.Application();
                 Excel.Workbook workbook = objExcel.Workbooks.Add();
                 Excel.Worksheet sheet = workbook.ActiveSheet;
@@ -1086,7 +1186,7 @@ namespace Model_eTOM
                 DataTable ct = new DataTable();
                 Adapter.Fill(ct);
                 connecting.Close();
-
+                //Открытие приложения
                 Excel.Application objExcel = new Excel.Application();
                 Excel.Workbook workbook = objExcel.Workbooks.Add();
                 Excel.Worksheet sheet = workbook.ActiveSheet;
@@ -1155,7 +1255,7 @@ namespace Model_eTOM
                 DataTable ct = new DataTable();
                 Adapter.Fill(ct);
                 connecting.Close();
-
+                //Открытие приложения
                 Excel.Application objExcel = new Excel.Application();
                 Excel.Workbook workbook = objExcel.Workbooks.Add();
                 Excel.Worksheet sheet = workbook.ActiveSheet;
@@ -1192,8 +1292,6 @@ namespace Model_eTOM
                         
                     }
                 }
-
-
                 // Автонастройка ширины столбцов
                 for (int col = 1; col <= ct.Columns.Count; col++)
                 {
@@ -1211,7 +1309,6 @@ namespace Model_eTOM
                 connecting.Close();
                 MessageBox.Show("Error: " + ex.Message);
             }
-
         }
         private void Contracts0_report(object sender, RoutedEventArgs e)
         {
@@ -1229,7 +1326,7 @@ namespace Model_eTOM
                 DataTable ct = new DataTable();
                 Adapter.Fill(ct);
                 connecting.Close();
-
+                //Открытие приложения
                 Excel.Application objExcel = new Excel.Application();
                 Excel.Workbook workbook = objExcel.Workbooks.Add();
                 Excel.Worksheet sheet = workbook.ActiveSheet;
@@ -1266,8 +1363,6 @@ namespace Model_eTOM
                         
                     }
                 }
-
-
                 // Автонастройка ширины столбцов
                 for (int col = 1; col <= ct.Columns.Count; col++)
                 {
@@ -1303,7 +1398,7 @@ namespace Model_eTOM
                 DataTable ct = new DataTable();
                 Adapter.Fill(ct);
                 connecting.Close();
-
+                //Открытие приложения
                 Excel.Application objExcel = new Excel.Application();
                 Excel.Workbook workbook = objExcel.Workbooks.Add();
                 Excel.Worksheet sheet = workbook.ActiveSheet;
@@ -1361,6 +1456,7 @@ namespace Model_eTOM
             }
 
         }
+        //Перезагрузка таблиц
         private void Reload(object sender, RoutedEventArgs e)
         {
             Services_table();
@@ -1370,7 +1466,7 @@ namespace Model_eTOM
             Supply_table();
             Contract_2_table();
         }
-
+        //Выход из приложения
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             Process.GetCurrentProcess().Kill();

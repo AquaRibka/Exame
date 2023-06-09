@@ -30,6 +30,7 @@ namespace Model_eTOM.Add
         readonly string connectPostgre = ConfigurationManager.ConnectionStrings["ConnectBD"].ConnectionString;
         private NpgsqlConnection connecting;
         public string IdData { get; set; }
+        //Загрузка данных для полей ввода и классы для них
         public Eqp_add()
         {
             connecting = new NpgsqlConnection(connectPostgre);
@@ -54,6 +55,7 @@ namespace Model_eTOM.Add
             try
             {
                 connecting.Open();
+                //SQl запрос
                 string sql = @"SELECT id,name FROM public.""Cabinet"";";
                 NpgsqlCommand cmd = new NpgsqlCommand(sql, connecting);
                 NpgsqlDataReader reader = cmd.ExecuteReader();
@@ -85,6 +87,7 @@ namespace Model_eTOM.Add
             try
             {
                 connecting.Open();
+                //SQl запрос
                 string sql = @"SELECT id, fio FROM public.""Users"" WHERE type_id = 6;";
                 NpgsqlCommand cmd = new NpgsqlCommand(sql, connecting);
                 NpgsqlDataReader reader = cmd.ExecuteReader();
@@ -116,6 +119,7 @@ namespace Model_eTOM.Add
             try
             {
                 connecting.Open();
+                //SQl запрос
                 string sql = @"SELECT id, interior_number FROM public.""Contracts"";";
                 NpgsqlCommand cmd = new NpgsqlCommand(sql, connecting);
                 NpgsqlDataReader reader = cmd.ExecuteReader();
@@ -167,6 +171,7 @@ namespace Model_eTOM.Add
                 MessageBox.Show("Error" + ex.Message);
             }
         }
+        //ВЫгрузка данных из бд
         private void DataUpload(string IdData)
         {
             if (IdData != null)
@@ -180,6 +185,7 @@ namespace Model_eTOM.Add
                     try
                     {
                         connecting.Open();
+                        //SQl запрос
                         string sql = @"
                    SELECT * FROM public.""Equipment""
                    WHERE id = " + IdData + ";";
@@ -191,7 +197,7 @@ namespace Model_eTOM.Add
                         {
                             if (!row.IsNull("category_id")) // Проверка, что значение не является NULL
                             {
-                                string value = row["category_id"].ToString(); // Получаем значение из определенного столбца
+                                string value = row["category_id"].ToString(); // Получаем значение
 
                                 foreach (Cat item in Category.Items)
                                 {
@@ -204,7 +210,7 @@ namespace Model_eTOM.Add
                             }
                             if (!row.IsNull("responsible_id")) // Проверка, что значение не является NULL
                             {
-                                string value = row["responsible_id"].ToString(); // Получаем значение из определенного столбца
+                                string value = row["responsible_id"].ToString(); // Получаем значение
 
                                 foreach (User item in Responsible.Items)
                                 {
@@ -217,20 +223,20 @@ namespace Model_eTOM.Add
                             }
                             if (!row.IsNull("cab_id")) // Проверка, что значение не является NULL
                             {
-                                string value = row["cab_id"].ToString(); // Получаем значение из определенного столбца
+                                string value = row["cab_id"].ToString(); // Получаем значение
 
                                 foreach (Cab item in Cabinet.Items)
                                 {
                                     if (item.Value.ToString() == value)
                                     {
-                                        Cabinet.SelectedItem = item; // Устанавливаем элемент в качестве выбранного
+                                        Cabinet.SelectedItem = item; // Устанавливаем элемент
                                         break;
                                     }
                                 }
                             }
                             if (!row.IsNull("doc_number")) // Проверка, что значение не является NULL
                             {
-                                string value = row["doc_number"].ToString(); // Получаем значение из определенного столбца
+                                string value = row["doc_number"].ToString(); // Получаем значение
 
                                 foreach (Doc item in doc.Items)
                                 {
@@ -273,6 +279,7 @@ namespace Model_eTOM.Add
                 }
             }
         }
+        //Очистка полей ввода
         private void Clear(object sender, RoutedEventArgs e)
         {
             Category.SelectedItem = null;
@@ -284,10 +291,11 @@ namespace Model_eTOM.Add
             ip.Text = null;
             name.Text = null;
         }
+        //Изменение данных
         private void Edit(object sender, RoutedEventArgs e)
         {
             MessageBoxResult result = MessageBox.Show("Вы уверены, что хотите внести изменения?", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Question);
-
+            //Проверка валидности
             if (result == MessageBoxResult.No)
             {
                 return;
@@ -330,7 +338,7 @@ namespace Model_eTOM.Add
             try
             {
                 connecting.Open();
-
+                //SQl запрос
                 string sql = @"
                 UPDATE public.""Equipment""
                 SET category_id = " + (Category.SelectedItem as Cat)?.Value + ", responsible_id = " + (Responsible.SelectedItem as User)?.Value + ", cab_id = " + (Cabinet.SelectedItem as Cab)?.Value + ", doc_number = " + (doc.SelectedItem as Doc)?.Value +
@@ -355,10 +363,12 @@ namespace Model_eTOM.Add
                 MessageBox.Show("Error: " + ex.Message);
             }
         }
+        //Закрытие окна
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
+        //Удаление занчений
         private void Del_Click(object sender, RoutedEventArgs e)
         {
             MessageBoxResult result = MessageBox.Show("Вы уверены, что хотите удалить эти данные?", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Question);
@@ -370,6 +380,7 @@ namespace Model_eTOM.Add
             try
             {
                 connecting.Open();
+                //SQl запрос
                 string sql = "DELETE FROM public.\"Equipment\" WHERE id = " + IdData + ";";
                 NpgsqlCommand cmd = new NpgsqlCommand(sql, connecting);
                 
@@ -390,8 +401,10 @@ namespace Model_eTOM.Add
                 MessageBox.Show("Ошибка при удалении данных: " + ex.Message);
             }
         }
+        //Добавление значений
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
+            //Проверка валидности
             if (Category.SelectedItem == null)
             {
                 MessageBox.Show("Выберите категорию");
@@ -430,6 +443,7 @@ namespace Model_eTOM.Add
             try
             {
                 connecting.Open();
+                //SQl запрос
                 string sql = @"
                     INSERT INTO public.""Equipment"" (status_id, category_id, responsible_id, cab_id, doc_number, buy_place, ip, suitability, name)
                     VALUES (3," + (Category.SelectedItem as Cat)?.Value + ", " + (Responsible.SelectedItem as User)?.Value + ", " + (Cabinet.SelectedItem as Cab)?.Value + ", " + (doc.SelectedItem as Doc)?.Value +

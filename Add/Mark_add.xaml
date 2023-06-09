@@ -31,24 +31,32 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
             <ColumnDefinition Width="0.3*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
+        <!-- Поля ввода -->
         <TextBox x:Name="Name" Text="Название" Grid.Row="0" Grid.Column="1" Style="{StaticResource TextBoxModule}"></TextBox>
         <TextBox x:Name="Budget" Text="Планируемый бюджет" Grid.Row="0" Grid.Column="3" Grid.ColumnSpan="2" Style="{StaticResource TextBoxModule}"></TextBox>
         <TextBox x:Name="Dates" Text="Сроки" Grid.Row="0" Grid.Column="6" Grid.ColumnSpan="2" Style="{StaticResource TextBoxModule}" ></TextBox>
         <TextBox x:Name="Target" Text="Цели" MaxLength="200" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="9" Style="{StaticResource TextBoxModule}" TextAlignment="Justify"></TextBox>
+        <!-- Панель ввода с пунктами -->
         <TextBox Text="План действий" IsReadOnly="True" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="9" Style="{StaticResource TextBoxModule}" TextAlignment="Justify"></TextBox>
+        <!-- Кнопка добавления полей -->
         <Button Content="+" FontSize="25" Grid.Column="9" Grid.Row="2" Click="PlanContainerAdd_Click"></Button>
+        <!-- Область отображения новых пунктов -->
         <ScrollViewer HorizontalScrollBarVisibility="Auto" Grid.RowSpan="2" Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="7" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="7*"></ColumnDefinition>
                     <ColumnDefinition Width="*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
+                <!-- Место под поля ввода -->
                 <StackPanel Grid.ColumnSpan="2" x:Name="planContainer"/>
+                <!-- Место под кнопки удаления полей -->
                 <StackPanel Grid.Column="1"  x:Name="planContainerButton"/>
             </Grid>
         </ScrollViewer>
+        <!-- Заголовк и поле выбора контракта -->
         <TextBlock Style="{StaticResource Header}" Text="Контракт:" Grid.Row="5" Grid.Column="4" Grid.ColumnSpan="3" TextAlignment="Center" ></TextBlock>
         <ComboBox x:Name="Contract" Text="Связанные контракты"  Grid.Row="6" Grid.Column="4" Grid.ColumnSpan="3"></ComboBox>
+        <!-- Кнопки взаимодействия -->
         <Button x:Name="Add" Content="Добавить" Grid.Row="7" Grid.Column="3" Click="Add_Click"></Button>
         <Button x:Name="Edit" Content="Изменить" Grid.Row="7" Grid.Column="3" Visibility="Collapsed" Click="Edit_Click"></Button>
         <Button x:Name="Clear" Content="Очистить" Grid.Row="7" Grid.Column="5" Grid.ColumnSpan="2" Click="Clear_Click"></Button>

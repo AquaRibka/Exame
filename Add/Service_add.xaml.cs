@@ -43,6 +43,7 @@ namespace Model_eTOM.Add
             Video.ItemsSource = boolchouse;
             Equipment.ItemsSource = boolchouse;
         }
+        //Классы для хранения данных
         public class Speed
         {
             public int Value { get; set; }
@@ -77,6 +78,7 @@ namespace Model_eTOM.Add
         {
             Data_Upload();
         }
+        //ВЫгрузка данных из БД
         private void Data_Upload()
         {
             if (IdData != null)
@@ -90,6 +92,7 @@ namespace Model_eTOM.Add
                     try
                     {
                         connecting.Open();
+                        //SQl запрос
                         string sql = @"
                            SELECT * FROM public.""Services""
                            WHERE id = " + IdData + ";";
@@ -101,7 +104,7 @@ namespace Model_eTOM.Add
                         {
                             if (!row.IsNull("channels")) // Проверка, что значение не является NULL
                             {
-                                string value = row["channels"].ToString(); // Получаем значение из определенного столбца
+                                string value = row["channels"].ToString(); // Получаем значение
 
                                 foreach (BoolFind item in Channels.Items)
                                 {
@@ -114,7 +117,7 @@ namespace Model_eTOM.Add
                             }
                             if (!row.IsNull("cinema")) // Проверка, что значение не является NULL
                             {
-                                string value = row["cinema"].ToString(); // Получаем значение из определенного столбца
+                                string value = row["cinema"].ToString(); // Получаем значение
 
                                 foreach (BoolFind item in Cinema.Items)
                                 {
@@ -127,7 +130,7 @@ namespace Model_eTOM.Add
                             }
                             if (!row.IsNull("mobile_connection")) // Проверка, что значение не является NULL
                             {
-                                string value = row["mobile_connection"].ToString(); // Получаем значение из определенного столбца
+                                string value = row["mobile_connection"].ToString(); // Получаем значение
 
                                 foreach (BoolFind item in mobileConnection.Items)
                                 {
@@ -140,7 +143,7 @@ namespace Model_eTOM.Add
                             }
                             if (!row.IsNull("equipment")) // Проверка, что значение не является NULL
                             {
-                                string value = row["equipment"].ToString(); // Получаем значение из определенного столбца
+                                string value = row["equipment"].ToString(); // Получаем значение
 
                                 foreach (BoolFind item in Equipment.Items)
                                 {
@@ -153,7 +156,7 @@ namespace Model_eTOM.Add
                             }
                             if (!row.IsNull("video")) // Проверка, что значение не является NULL
                             {
-                                string value = row["video"].ToString(); // Получаем значение из определенного столбца
+                                string value = row["video"].ToString(); // Получаем значение
 
                                 foreach (BoolFind item in Video.Items)
                                 {
@@ -166,7 +169,7 @@ namespace Model_eTOM.Add
                             } 
                             if (!row.IsNull("speed")) // Проверка, что значение не является NULL
                             {
-                                string value = row["speed"].ToString(); // Получаем значение из определенного столбца
+                                string value = row["speed"].ToString(); // Получаем значение
 
                                 foreach (Speed item in SpeedBox.Items)
                                 {
@@ -205,6 +208,7 @@ namespace Model_eTOM.Add
                 }
             }
         }
+        //Очистка полей ввода
         private void Clear_Click(object sender, RoutedEventArgs e)
         {
             Channels.SelectedItem = null;
@@ -217,10 +221,12 @@ namespace Model_eTOM.Add
             about.Text = null;
             price.Text = null;
         }
+        //Закрытие окна
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
+        //УУдаление данных
         private void Del_Click(object sender, RoutedEventArgs e)
         {
             MessageBoxResult result = MessageBox.Show("Вы уверены, что хотите удалить эти данные?", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Question);
@@ -232,6 +238,7 @@ namespace Model_eTOM.Add
             try
             {
                 connecting.Open();
+                //SQl запрос
                 string sql = "DELETE FROM public.\"Services\" WHERE id = " + IdData + ";";
                 NpgsqlCommand cmd = new NpgsqlCommand(sql, connecting);
 
@@ -252,42 +259,43 @@ namespace Model_eTOM.Add
                 MessageBox.Show("Ошибка при удалении данных: " + ex.Message);
             }
         }
+        //Изменение данных
         private void EditButton_Click(object sender, RoutedEventArgs e)
         {
             MessageBoxResult result = MessageBox.Show("Вы уверены, что хотите внести изменения?", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Question);
-
+            //Проверка валидности
             if (result == MessageBoxResult.No)
             {
                 return;
             }
             if (Channels.SelectedItem == null)
             {
-                MessageBox.Show("Выберите категорию");
+                MessageBox.Show("Проверьте поле Каналы");
                 return;
             }
             else if (Cinema.SelectedItem == null)
             {
-                MessageBox.Show("Выберите ответственного");
+                MessageBox.Show("Проверьте поле Онлайн-кинотеатр");
                 return;
             }
             else if (mobileConnection.SelectedItem == null)
             {
-                MessageBox.Show("Выберите кабинет");
+                MessageBox.Show("Проверьте поле Мобильное соединение");
                 return;
             }
             else if (Equipment.SelectedItem == null)
             {
-                MessageBox.Show("Выберите документ");
+                MessageBox.Show("Проверьте поле оборудование");
                 return;
             }
             else if (Video.SelectedItem == null)
             {
-                MessageBox.Show("Выберите документ");
+                MessageBox.Show("Проверьте поле Видеонаблюдение");
                 return;
             }
             else if (SpeedBox.SelectedItem == null)
             {
-                MessageBox.Show("Выберите документ");
+                MessageBox.Show("Проверьте поле Скорость интернета");
                 return;
             }
             else if (name.Text == "")
@@ -308,12 +316,14 @@ namespace Model_eTOM.Add
             try
             {
                 connecting.Open();
+                //SQl запрос
                 string sql = @"UPDATE public.""Services""
                 SET cinema = @cinema, mobile_connection = @mobile_connection, equipment = @equipment, video = @video, channels = @channels, speed = @speed,
                 serv_name = @serv_name, about = @about, price = @price
                 WHERE id = @id";
                 using (var command = new NpgsqlCommand(sql, connecting))
                 {
+                    //Параметры запроса
                     command.Parameters.AddWithValue("@cinema", (Cinema.SelectedItem as BoolFind)?.Value);
                     command.Parameters.AddWithValue("@mobile_connection", (mobileConnection.SelectedItem as BoolFind)?.Value);
                     command.Parameters.AddWithValue("@equipment", (Equipment.SelectedItem as BoolFind)?.Value);
@@ -343,37 +353,38 @@ namespace Model_eTOM.Add
                 MessageBox.Show("Error: " + ex.Message);
             }
         }
-
+        //Добавление данных
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
+            //Првоерка валидности
             if (Channels.SelectedItem == null)
             {
-                MessageBox.Show("Выберите категорию");
+                MessageBox.Show("Проверьте поле Каналы");
                 return;
             }
             else if (Cinema.SelectedItem == null)
             {
-                MessageBox.Show("Выберите ответственного");
+                MessageBox.Show("Проверьте поле Онлайн-кинотеатр");
                 return;
             }
             else if (mobileConnection.SelectedItem == null)
             {
-                MessageBox.Show("Выберите кабинет");
+                MessageBox.Show("Проверьте поле Мобильное соединение");
                 return;
             }
             else if (Equipment.SelectedItem == null)
             {
-                MessageBox.Show("Выберите документ");
+                MessageBox.Show("Проверьте поле оборудование");
                 return;
             }
             else if (Video.SelectedItem == null)
             {
-                MessageBox.Show("Выберите документ");
+                MessageBox.Show("Проверьте поле Видеонаблюдение");
                 return;
             }
             else if (SpeedBox.SelectedItem == null)
             {
-                MessageBox.Show("Выберите документ");
+                MessageBox.Show("Проверьте поле Скорость интернета");
                 return;
             }
             else if (name.Text == "")
@@ -394,6 +405,7 @@ namespace Model_eTOM.Add
             try
             {
                 connecting.Open();
+                //SQl запрос
                 string sql = @"
             INSERT INTO public.""Services"" (cinema, mobile_connection, equipment, video, channels, speed, serv_name, about, price)
             VALUES (" + (Cinema.SelectedItem as BoolFind)?.Value + ", " + (mobileConnection.SelectedItem as BoolFind)?.Value + ", " + (Equipment.SelectedItem as BoolFind)?.Value + ", " + (Video.SelectedItem as BoolFind)?.Value + ", " + (Channels.SelectedItem as BoolFind)?.Value + ", "+ (SpeedBox.SelectedItem as Speed)?.Value + ", '"+ name.Text.TrimEnd() + "', '"+ about.Text.TrimEnd() + "', " + price.Text.Replace('.', ',').TrimEnd() + ") RETURNING id;";

@@ -9,7 +9,6 @@
         Title="Поставка" Height="450" Width="800" Style="{StaticResource WindowStyle}">
     <Grid>
         <Grid.ColumnDefinitions>
-            
             <ColumnDefinition Width="0.2*"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="0.1*"/>
@@ -17,7 +16,6 @@
             <ColumnDefinition Width="0.1*"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="0.2*"/>
-            
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -28,6 +26,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+        <!-- Поля ввода с заголовками -->
         <TextBox x:Name="About" Text="Описание" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="5"  Style="{StaticResource TextBoxModule}" TextAlignment="Justify"/>
         <TextBlock Text="Сумма: " Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Style="{StaticResource Header}"/>
         <TextBox x:Name="Sum" Grid.Row="2" Grid.Column="1" Style="{StaticResource InputBox}"/>
@@ -37,6 +36,7 @@
         <ComboBox x:Name="Contract" Grid.Row="2" Grid.Column="5"/>
         <TextBlock Text="Организация: " Grid.Row="3" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" Style="{StaticResource Header}"/>
         <ComboBox x:Name="Organization" Grid.Row="4" Grid.Column="3"/>
+        <!-- Кнопки взаимодействия -->
         <Button  x:Name="AddButton" Content="Добавить" Grid.Row="6" Grid.Column="1" Click="Add"></Button>
         <Button x:Name="EditButton" Content="Изменить" Grid.Row="6" Grid.Column="1" Click="Edit" Visibility="Collapsed"></Button>
         <Button Content="Очистить" Grid.Row="6" Grid.Column="3" Grid.ColumnSpan="2" Click="Clear"></Button>

@@ -96,6 +96,7 @@ namespace Model_eTOM.Add
             }
             UploadData();
         }
+        //Выгрузка данных из бд
         private void UploadData()
         {
             if (IdData != null)
@@ -109,6 +110,7 @@ namespace Model_eTOM.Add
                     try
                     {
                         connecting.Open();
+                        //SQl запрос
                         string sql = @"
                            SELECT * FROM public.""Supply""
                            WHERE id = " + IdData + ";";
@@ -120,7 +122,7 @@ namespace Model_eTOM.Add
                         {
                             if (!row.IsNull("contract_id")) // Проверка, что значение не является NULL
                             {
-                                string value = row["contract_id"].ToString(); // Получаем значение из определенного столбца
+                                string value = row["contract_id"].ToString(); // Получаем значение
 
                                 foreach (ComboBoxItem item in Contract.Items)
                                 {
@@ -133,7 +135,7 @@ namespace Model_eTOM.Add
                             }
                             if (!row.IsNull("org_id")) // Проверка, что значение не является NULL
                             {
-                                string value = row["org_id"].ToString(); // Получаем значение из определенного столбца
+                                string value = row["org_id"].ToString(); // Получаем значение
 
                                 foreach (ComboBoxItem item in Organization.Items)
                                 {
@@ -172,12 +174,12 @@ namespace Model_eTOM.Add
                 }
             }
         }
-
+        //Заакрытие окна
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
-
+        //Удаление данных
         private void Del_Click(object sender, RoutedEventArgs e)
         {
             MessageBoxResult result = MessageBox.Show("Вы уверены, что хотите удалить эти данные?", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Question);
@@ -189,6 +191,7 @@ namespace Model_eTOM.Add
             try
             {
                 connecting.Open();
+                //SQl запрос
                 string sql = "DELETE FROM public.\"Supply\" WHERE id = " + IdData + ";";
                 NpgsqlCommand cmd = new NpgsqlCommand(sql, connecting);
                 int rowsAffected = cmd.ExecuteNonQuery();
@@ -207,9 +210,10 @@ namespace Model_eTOM.Add
                 MessageBox.Show("Ошибка при удалении данных: " + ex.Message);
             }
         }
-
+        //Добавление данных
         private void Add(object sender, RoutedEventArgs e)
         {
+            //Првоерка валидности
             if (Contract.SelectedItem == null)
             {
                 MessageBox.Show("Выберите контракт");
@@ -238,6 +242,7 @@ namespace Model_eTOM.Add
             try
             {
                 connecting.Open();
+                //SQl запрос
                 string sql = @"
             INSERT INTO public.""Supply"" (contract_id, org_id, summ, about, date)
             VALUES (" + (Contract.SelectedItem as ComboBoxItem)?.Tag?.ToString() + ", " + (Organization.SelectedItem as ComboBoxItem)?.Tag?.ToString() + ", " + Sum.Text.Replace(',', '.') + ", '" + About.Text + "', '" + Date.Text.Replace(',', '.') + "') RETURNING id;";
@@ -261,11 +266,11 @@ namespace Model_eTOM.Add
                 MessageBox.Show("Error: " + ex.Message);
             }
         }
-
+        //Изменеие данных
         private void Edit(object sender, RoutedEventArgs e)
         {
             MessageBoxResult result = MessageBox.Show("Вы уверены, что хотите внести изменения?", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Question);
-
+            //Проверка валидности
             if (result == MessageBoxResult.No)
             {
                 return;
@@ -297,6 +302,7 @@ namespace Model_eTOM.Add
             }
             try
             {
+                //SQl запрос
                 string sql = @"
                     UPDATE public.""Supply""
                     SET contract_id = @contractId, org_id = @orgId, about = @about, summ = @summ, date = @date
@@ -304,6 +310,7 @@ namespace Model_eTOM.Add
                 connecting.Open();
                 using (NpgsqlCommand cmd = new NpgsqlCommand(sql, connecting))
                 {
+                    //Параметры запроса
                     cmd.Parameters.AddWithValue("contractId",int.Parse((Contract.SelectedItem as ComboBoxItem)?.Tag?.ToString()));
                     cmd.Parameters.AddWithValue("orgId", int.Parse((Organization.SelectedItem as ComboBoxItem)?.Tag?.ToString()));
                     cmd.Parameters.AddWithValue("about", About.Text);
@@ -329,6 +336,7 @@ namespace Model_eTOM.Add
                 MessageBox.Show("Error: " + ex.Message);
             }
         }
+        //Очистка полей ввода
         private void Clear(object sender, RoutedEventArgs e)
         {
             Contract.SelectedItem = null;

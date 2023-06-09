@@ -27,12 +27,17 @@
             <ColumnDefinition Width="0.1*"/>
             <ColumnDefinition Width="0.05*"/>
         </Grid.ColumnDefinitions>
+        <!-- Фоновые прямоугольники -->
         <Rectangle Fill="#117B8E" Grid.Column="1" Grid.ColumnSpan="5" Grid.Row="1" Grid.RowSpan="4"  StrokeThickness="0" RadiusX="20" RadiusY="20"/>
         <Rectangle Fill="#2C4370" Grid.Column="2" Grid.ColumnSpan="3" Grid.Row="2" StrokeThickness="0" RadiusX="20" RadiusY="20"/>
+        <!-- Место для графика -->
         <Image x:Name="chartImage" Grid.Column="2" Grid.ColumnSpan="3" Grid.Row="2" Stretch="Uniform" Margin="0,0,0,10" />
+        <!-- Мето для данных -->
         <TextBlock x:Name="Date" Text="Дата проведения: " Margin="10,0,0,0"  Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3" Style="{StaticResource Forecast}"/>
         <TextBlock x:Name="Budget" Text="Бюджет: " Margin="0,0,10,0"  Grid.Row="4" Grid.Column="4" Grid.ColumnSpan="2" Style="{StaticResource Forecast}"/>
+        <!-- Кнопка закрытия окна -->
         <Button Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2" Width="Auto" Content="Закрыть" Click="Button_Click_1"/>
+        <!-- Кнопка скачивания прогноза -->
         <Button Grid.Row="6" Grid.Column="4" Grid.ColumnSpan="2" Width="Auto" Content="Скачать изображение" Click="Button_Click"/>
     </Grid>
 </Window>

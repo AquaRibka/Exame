@@ -27,6 +27,7 @@ namespace Model_eTOM
     /// </summary>
     public partial class Forecast : Window
     {
+        //Переменная для хранения изображения
         public BitmapImage chartBitmap = new BitmapImage();
         string connectPostgre = ConfigurationManager.ConnectionStrings["ConnectBD"].ConnectionString;
         private NpgsqlConnection connecting;
@@ -41,12 +42,10 @@ namespace Model_eTOM
             connecting = new NpgsqlConnection(connectPostgre);
             Data_Upload();
         }
+        //Класс для точек графика
         class DataPoint
         {
-            //  public string Year { get; set; }
             public int Forecast { get; set; }
-
-
             public DataPoint(int forecast)
             {
                 //  Year = year;
@@ -75,17 +74,19 @@ namespace Model_eTOM
             {
 
                 connecting.Open();
-                
+                //SQL запрос
                 string sql = @"
                    SELECT *
                    FROM public.""Marketing""
                    WHERE id = " + IdData + ";";
+                //ВЫгрузка данных из БД
                 NpgsqlCommand cmd = new NpgsqlCommand(sql, connecting);
                 NpgsqlDataAdapter iAdapter = new NpgsqlDataAdapter(cmd);
                 DataTable iDataSet = new DataTable();
                 iAdapter.Fill(iDataSet);
                 connecting.Close();
                 DataRow[] data_row = iDataSet.Select();
+                //Форматирование данных
                 DateTime dateStart = (DateTime)data_row[0]["date_start"];
                 DateTime dateEndVisible = (DateTime)data_row[0]["date_end"];
                 string formattedDateStart = dateStart.ToString("d");
@@ -93,37 +94,31 @@ namespace Model_eTOM
                 Budget.Text += data_row[0]["budget"].ToString()+ " \u20BD";
                 Date.Text += formattedDateStart + " - " + formattedDateEnd ;
                 string budget = data_row[0]["budget"].ToString();
-                // string dateStart = data_row[0]["date_start"].ToString();
                 budget = budget.Remove(budget.LastIndexOf(@","));
                 int budgetValue = int.Parse(budget);
                 int yearStart = int.Parse(data_row[0]["date_start"].ToString().Substring(6, 4));
                 int yearEnd = int.Parse(data_row[0]["date_end"].ToString().Substring(6, 4));
-
-                //   MessageBox.Show(data_row[0]["date_start"].ToString().Substring(0, 10));
+                //Определение времени прогноза
                 if (yearEnd - yearStart <= 1)
                 {
                     DateTime date1 = DateTime.ParseExact(data_row[0]["date_start"].ToString().Substring(0, 10), "dd.MM.yyyy", CultureInfo.InvariantCulture);
-
                     DateTime date2 = DateTime.ParseExact(data_row[0]["date_end"].ToString().Substring(0, 10), "dd.MM.yyyy", CultureInfo.InvariantCulture);
                     TimeSpan span = date2.Subtract(date1); // вычисляем разницу между датами
                     double months = span.TotalDays / 30.436875; // переводим дни в месяцы
                     months = Math.Round(months, MidpointRounding.AwayFromZero); // округляем до целого числа
-
+                    //Формаирование даты окончания прогноза
                     dateEnd = (int)months + 3;
                     double[] dataValue = new double[dateEnd];
                     for (int i = 0; i < dataValue.Length; i++)
                     {
                         double randomNumber = random.NextDouble();
-                        // MessageBox.Show(randomNumber.ToString());
                         if (i == 0)
                         {
                             dataValue[i] = budgetValue / dateEnd * (randomNumber * randomNumber) * 0.1;
-                            //  MessageBox.Show(dataValue[i].ToString());
                         }
                         else
                         {
                             dataValue[i] = dataValue[i - 1] + (budgetValue / dateEnd * (randomNumber * randomNumber) * 0.1);
-
                         }
 
                         dataPoints.Add(new DataPoint((int)Math.Round(dataValue[i])));
@@ -131,32 +126,23 @@ namespace Model_eTOM
                 }
                 else
                 {
-
                     dateEnd = yearEnd - yearStart;
                     double[] dataValue = new double[dateEnd];
                     for (int i = 0; i < dataValue.Length; i++)
                     {
                         double randomNumber = random.NextDouble();
-                        // MessageBox.Show(randomNumber.ToString());
                         if (i == 0)
                         {
                             dataValue[i] = budgetValue / dateEnd * (randomNumber * randomNumber) * 0.1;
-                            //  MessageBox.Show(dataValue[i].ToString());
                         }
                         else
                         {
                             dataValue[i] = dataValue[i - 1] + (budgetValue / dateEnd * (randomNumber * randomNumber) * 0.1);
-
                         }
-
+                        //Добавление точек графика
                         dataPoints.Add(new DataPoint((int)Math.Round(dataValue[i])));
                     }
                 }
-                //  MessageBox.Show(yearStart.ToString());
-
-
-
-
                 // Формируем URL для запроса к API
                 string url = "https://chart.googleapis.com/chart" +
                     "?cht=lc" + // Тип графика - линейный
@@ -174,17 +160,14 @@ namespace Model_eTOM
                     "&chdlp=b" + // Выравнивание легенды 
                     "&chf=bg,s,2C4370" + // Фоновый цвет графика
                     "&chc=FFF9F3"; // Цвет линий осей
-
-                // Отправляем запрос к API и получаем ответ в формате изображения
+                //Запрос API
                 WebClient client = new WebClient();
                 byte[] imageBytes = client.DownloadData(url);
-
-
-                // Создаем BitmapImage из полученных байтов и устанавливаем его в качестве источника изображения для элемента Image
-               
+                //Создание изображения из байтов запроса
                 chartBitmap.BeginInit();
                 chartBitmap.StreamSource = new System.IO.MemoryStream(imageBytes);
                 chartBitmap.EndInit();
+                //Утсановка источника данных для места под изображение
                 chartImage.Source = chartBitmap;
 
             }
@@ -194,10 +177,11 @@ namespace Model_eTOM
                 MessageBox.Show("Error: " + ex.Message);
             }
         }
-
+        //Сохранение прогноза
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
+            //Параметры сохранения
             saveFileDialog.Filter = "Изображения (*.png)|*.png|Все файлы (*.*)|*.*";
             saveFileDialog.Title = "Сохранить изображение";
             saveFileDialog.FileName = "Прогноз компании №"+IdData + ".png";
@@ -216,7 +200,7 @@ namespace Model_eTOM
                 MessageBox.Show("Изображение успешно сохранено.", "Сохранение");
             }
         }
-
+        //Закрытие окна
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             this.Close();

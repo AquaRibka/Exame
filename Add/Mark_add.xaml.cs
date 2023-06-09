@@ -40,6 +40,7 @@ namespace Model_eTOM.Add
         {
             PlanContainerAdd();
         }
+        //Добавление полей ввода
         private void PlanContainerAdd()
         {
             var app = Application.Current;
@@ -50,9 +51,11 @@ namespace Model_eTOM.Add
                 Button newButton = new Button();
                 // Присвоить уникальный идентификатор
                 newTextBox.Name = "TextBox_" + planCount;
+                //Пишем стили
                 newTextBox.TextAlignment = TextAlignment.Justify;
                 newTextBox.Margin = new Thickness(0, 0, 0, 10);
                 newTextBox.Style = app.Resources["TextBoxModuleSecond"] as Style;
+                //Стили кнопки
                 newButton.Tag = planCount.ToString();
                 newButton.Name = "Button_" + planCount.ToString();
                 newButton.Content = "⁻";
@@ -61,13 +64,14 @@ namespace Model_eTOM.Add
                 newButton.FontSize = 30;
                 newButton.FontWeight = FontWeights.Bold;
                 newButton.Click += PlanContainerRemove_Click;
-                // Добавить TextBox в контейнер
+                // Добавить TextBox и кнопку в контейнер
                 planContainer.Children.Add(newTextBox);
                 planContainerButton.Children.Add(newButton);
                 planCount++;
             }
             else MessageBox.Show("Максимум 10 полей");
         }
+        //Удаление полей ввода
         private void PlanContainerRemove_Click(object sender, RoutedEventArgs e)
         {
             Button button = (Button)sender;
@@ -78,11 +82,10 @@ namespace Model_eTOM.Add
             planContainerButton.Children.Remove(buttonToRemove);
             planCount--;
         }
-
-
+        //Добавление данных
         private void Add_Click(object sender, RoutedEventArgs e)
         {
-
+            //Проверка валидности
             if (Dates.Text == null || !Regex.IsMatch(Dates.Text, @"\d{2}\.\d{2}\.\d{4}-\d{2}\.\d{2}\.\d{4}"))
             {
                 MessageBox.Show("Проверьте поле Сроки");
@@ -122,7 +125,7 @@ namespace Model_eTOM.Add
             string target = Target.Text;
 
             int contractId = Contract.SelectedIndex;
-
+            //SQl запрос
             string sql = @"
             INSERT INTO public.""Marketing"" (name, budget, target, contract_id, date_start, date_end, actions)
             VALUES ('"+name+"', "+budget+", '" +target+"', " + contractId + ", @DateStart, @DateEnd, @Actions) RETURNING id;;";
@@ -150,11 +153,11 @@ namespace Model_eTOM.Add
                 MessageBox.Show("Не удалось обновить значения в базе данных.");
             }
         }
-
+        //Изменение данных
         private void Edit_Click(object sender, RoutedEventArgs e)
         {
             MessageBoxResult result = MessageBox.Show("Вы уверены, что хотите внести изменения?", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Question);
-
+            //Проверка валидности
             if (result == MessageBoxResult.No)
             {
                 return;
@@ -197,7 +200,7 @@ namespace Model_eTOM.Add
             string target = Target.Text;
             
             int contractId = Contract.SelectedIndex;
-
+            //SQl запрос
             string sql = @"
     UPDATE public.""Marketing""
     SET name = '" + name + "', budget = '" + budget + "', target = '" + target + "', contract_id = " + contractId + ", date_start = @dateStart, date_end = @dateEnd, actions = @Actions " +
@@ -225,7 +228,7 @@ namespace Model_eTOM.Add
             }
 
         }
-
+        //Очистка полей ввода
         private void Clear_Click(object sender, RoutedEventArgs e)
         {
             Name.Text = null;
@@ -238,12 +241,12 @@ namespace Model_eTOM.Add
                 textBox.Text = string.Empty;
             }
         }
-
+        //Закрытие окна
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
-
+        //Удаление данных
         private void Del_Click(object sender, RoutedEventArgs e)
         {
             MessageBoxResult result = MessageBox.Show("Вы уверены, что хотите удалить эти данные?", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Question);
@@ -256,6 +259,7 @@ namespace Model_eTOM.Add
             try
             {
                 connecting.Open();
+                //SQl запрос
                 string sql = "DELETE FROM public.\"Marketing\" WHERE id = " + IdData + ";";
                 NpgsqlCommand cmd = new NpgsqlCommand(sql, connecting);
 
@@ -276,7 +280,6 @@ namespace Model_eTOM.Add
                 MessageBox.Show("Ошибка при удалении данных: " + ex.Message);
             }
         }
-
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             try
@@ -316,6 +319,7 @@ namespace Model_eTOM.Add
             }
             Data_Upload();
         }
+        //Класс для хранения данных о компании
         public class MarketingItem
         {
             public string name { get; set; }
@@ -327,6 +331,7 @@ namespace Model_eTOM.Add
             public DateTime date_end { get; set; }
 
         }
+        //Выгрузка данных из БД
         private void Data_Upload()
         {
             connecting.Open();
@@ -338,6 +343,7 @@ namespace Model_eTOM.Add
                     Del.Visibility = Visibility.Visible;
                     Add.Visibility = Visibility.Collapsed;
                     Edit.Visibility = Visibility.Visible;
+                    //SQl запрос
                     string sql = "SELECT * FROM public.\"Marketing\" WHERE id = " + IdData + ";";
                     NpgsqlCommand command = new NpgsqlCommand(sql, connecting);
                     using (NpgsqlDataReader reader = command.ExecuteReader())
@@ -348,9 +354,9 @@ namespace Model_eTOM.Add
                             decimal budget = reader.GetDecimal(2);
                             string target = reader.GetString(3);
                             int contract_id = reader.GetInt32(7);
-                            string[] actions = (string[])reader.GetValue(4); // Преобразуйте значение в массив строк
-                            DateTime date_start = reader.GetDateTime(5); // Прочитайте значение даты из столбца
-                            DateTime date_end = reader.GetDateTime(6); // Прочитайте значение даты из столбца, учитывая возможные значения NULL
+                            string[] actions = (string[])reader.GetValue(4); // Преобразование в массив строк
+                            DateTime date_start = reader.GetDateTime(5);
+                            DateTime date_end = reader.GetDateTime(6);
                             for (int i = 0; i < actions.Length; i++)
                             {
                                 actions[i] = actions[i].TrimEnd();
@@ -371,6 +377,7 @@ namespace Model_eTOM.Add
                 }
             }
         }
+        //Заполнение полей ввода
         private void FillPlanContainer(string[] actions)
         {
             var actionTextBoxes = planContainer.Children.OfType<TextBox>().Where(tb => tb.Name.StartsWith("TextBox_")).ToList();

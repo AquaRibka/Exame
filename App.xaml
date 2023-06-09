@@ -5,7 +5,9 @@
              xmlns:controls="clr-namespace:System.Windows.Controls;assembly=PresentationFramework"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
+        <!-- Шрифт -->
         <FontFamily x:Key="NewsCycle">/Model_eTOM;component/resources/NewsCycle-Regular.ttf#News Cycle</FontFamily>
+        <!-- Стиль окна -->
         <Style x:Key="WindowStyle" TargetType="Window">
             <Setter Property="Background">
                 <Setter.Value>
@@ -13,7 +15,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
-       
+        <!-- Стиль меню вкладок -->
         <Style TargetType="TabControl">
             <Setter Property="FontFamily" Value="{StaticResource NewsCycle}"/>
             <Setter Property="FontSize" Value="14" />
@@ -23,6 +25,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <!-- Стиль таблиц с данными -->
         <Style TargetType="DataGrid">
             <Setter Property="FontSize" Value="16" />
             <Setter Property="Background" Value="#2C4370" />
@@ -32,29 +35,33 @@
             <Setter Property="VerticalGridLinesBrush" Value="#2C4370" />
             <Setter Property="BorderThickness" Value="0"/>
         </Style>
+        <!-- Стиль ячеек таблицы -->
         <Style TargetType="DataGridCell">
             <Setter Property="FontSize" Value="14" />
             <Setter Property="Background" Value="#FFF9F3"/>
             <Setter Property="Foreground" Value="#2C4370"/>
             <Setter Property="BorderThickness" Value="0" />
         </Style>
+        <!-- Стиль заголовков таблиц -->
         <Style TargetType="DataGridColumnHeader">
             <Setter Property="Background" Value="#2C4370"/>
             <Setter Property="Foreground" Value="#FFF9F3"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>
-            
         </Style>
         <Style TargetType="DataGridRowHeader">
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="BorderThickness" Value="0" />
         </Style>
+        <!-- Стиль горизонтальной прокрутки -->
         <Style TargetType="ScrollViewer">
             <Setter Property="HorizontalScrollBarVisibility" Value="Hidden" />
         </Style>
+        <!-- Стиль полей ввода -->
         <Style TargetType="TextBox">
             <Setter Property="Foreground" Value="#FFF9F3"></Setter>
             <Setter Property="BorderThickness" Value="0"></Setter>
         </Style>
+        <!-- Стиль поля ввода поиска -->
         <Style x:Key="SearchBox" TargetType="TextBox">
             <Setter Property="Foreground" Value="Black"></Setter>
             <Setter Property="BorderThickness" Value="0"></Setter>
@@ -62,6 +69,7 @@
         <Style x:Key="InputBox"  TargetType="TextBox">
             <Setter Property="Foreground" Value="#2C4370"></Setter>
         </Style>
+        <!-- Стиль полей ввода в модульных окнах -->
         <Style x:Key="TextBoxModule" TargetType="TextBox">
             <Setter Property="FontSize" Value="16" />
             <Setter Property="Background" Value="#117B8E"/>
@@ -73,6 +81,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="TextBox">
+                        <!-- Парметры -->
                         <Border Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
@@ -88,6 +97,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <!-- Стиль заголовков -->
         <Style x:Key="Header"  TargetType="TextBlock">
             <Setter Property="Foreground" Value="#FFF9F3"/>
             <Setter Property="FontFamily" Value="{StaticResource NewsCycle}" />
@@ -95,11 +105,13 @@
             <Setter Property="Margin" Value="0,0,0,0"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
+        <!-- Стиль заголовков в окне прогноза -->
         <Style x:Key="Forecast"  TargetType="TextBlock">
             <Setter Property="Foreground" Value="#FFF9F3"/>
             <Setter Property="FontFamily" Value="{StaticResource NewsCycle}" />
             <Setter Property="FontSize" Value="16" />
         </Style>
+        <!-- Дополнительный стиль полей ввода модульных окон -->
         <Style x:Key="TextBoxModuleSecond" TargetType="TextBox">
             <Setter Property="Background" Value="#117B8E"/>
             <Setter Property="Foreground" Value="#FFF9F3"/>
@@ -107,25 +119,26 @@
             <Setter Property="BorderThickness" Value="0" />
             <Setter Property="Height" Value="40"/>
             <Setter Property="FontFamily" Value="{StaticResource NewsCycle}" />
-            <!-- <Setter Property="Padding" Value="50,0,10,0"/> -->
             <Setter Property="Template">
                 <Setter.Value>
+                    <!-- Парметры -->
                     <ControlTemplate TargetType="TextBox">
                         <Border Background="{TemplateBinding Background}"
                     BorderBrush="{TemplateBinding BorderBrush}"
                     BorderThickness="{TemplateBinding BorderThickness}"
                     CornerRadius="20">
-                            <TextBox Text="{TemplateBinding Text}" 
-                         HorizontalContentAlignment="Center"
-                         VerticalContentAlignment="Center"
-                         Padding="5"
-                         Background="Transparent"
-                         BorderBrush="Transparent"/>
+                            <TextBox Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Text, Mode=TwoWay}"
+                            HorizontalContentAlignment="Center"
+                            VerticalContentAlignment="Center"
+                            Padding="5"
+                            Background="Transparent"
+                            BorderBrush="Transparent"/>
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
+        <!-- Стиль кнопок -->
         <Style TargetType="Button">
             <Setter Property="Background" Value="#117B8E"/>
             <Setter Property="Foreground" Value="#FFF9F3"/>
@@ -137,6 +150,7 @@
             <Setter Property="FontFamily" Value="{StaticResource NewsCycle}" />
             <Setter Property="Template">
                 <Setter.Value>
+                    <!-- Парметры -->
                     <ControlTemplate TargetType="Button">
                         <Border Background="{TemplateBinding Background}"
                                 BorderBrush="{TemplateBinding BorderBrush}"
@@ -160,11 +174,13 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <!-- Дополнительный стиль кнопок -->
         <Style x:Key="SecondWindowButton" TargetType="Button">
             <Setter Property="Width" Value="40"/>
             <Setter Property="Height" Value="40"/>
             <Setter Property="FontSize" Value="40"/>
         </Style>
+        <!-- Стиль выпадающих списков -->
         <Style TargetType="ComboBox">
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="Padding" Value="0, -2, 0, 0"/>

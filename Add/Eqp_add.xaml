@@ -33,6 +33,7 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
             <ColumnDefinition Width="0.3*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
+        <!-- Заголовки и поля для ввода -->
         <TextBox x:Name="name" Text="Название" Grid.Row="0" Grid.Column="1" Style="{StaticResource TextBoxModule}"/>
         <TextBlock Text="Категория:" HorizontalAlignment="Stretch" TextAlignment="Center" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource Header}"/>
         <ComboBox x:Name="Category" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" DisplayMemberPath="Display"/>
@@ -48,6 +49,7 @@
         <TextBox x:Name="ip" Grid.Row="6" Grid.Column="7" Grid.ColumnSpan="2" Style="{StaticResource InputBox}"/>
         <TextBlock Text="Место расположения:" HorizontalAlignment="Stretch" TextAlignment="Center" Grid.Row="8" Grid.Column="4" Grid.ColumnSpan="2" Style="{StaticResource Header}"/>
         <ComboBox x:Name="Cabinet" Grid.Row="9" Grid.Column="4" Grid.ColumnSpan="2" DisplayMemberPath="Display"/>
+        <!-- Кнопки взаимодействия -->
         <Button Content="Добавить" Grid.Row="10" Grid.Column="2" x:Name="AddButton" Click="AddButton_Click"></Button>
         <Button Grid.Row="10" Grid.Column="2" x:Name="EditButton" Content="Изменить" Visibility="Collapsed" Click="Edit"></Button>
         <Button Content="Очистить" Grid.Row="10" Grid.Column="4" Grid.ColumnSpan="2" Click="Clear"></Button>

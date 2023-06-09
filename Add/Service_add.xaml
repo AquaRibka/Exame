@@ -34,6 +34,7 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
             <ColumnDefinition Width="0.3*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
+        <!-- Поля ввода с заголовками -->
         <TextBox x:Name="name"  Text="Название" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource TextBoxModule}"/>
         <TextBox x:Name="about" Text="Описание" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="9" Style="{StaticResource TextBoxModule}" TextAlignment="Justify"/>
         <TextBlock Text="Скорость интернета:" HorizontalAlignment="Stretch" TextAlignment="Center" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource Header}"/>
@@ -50,6 +51,7 @@
         <ComboBox x:Name="Equipment" Grid.Row="7" Grid.Column="7" Grid.ColumnSpan="2" DisplayMemberPath="Display"/>
         <TextBlock Text="Цена:" HorizontalAlignment="Stretch" TextAlignment="Center" Grid.Row="9" Grid.Column="4" Grid.ColumnSpan="2" Style="{StaticResource Header}"/>
         <TextBox x:Name="price" Grid.Row="10" Grid.Column="4" Grid.ColumnSpan="2" Style="{StaticResource InputBox}"/>
+        <!-- Кнопки взаимодействия -->
         <Button x:Name="AddButton" Content="Добавить" Grid.Row="11" Grid.Column="2" Click="AddButton_Click"></Button>
         <Button x:Name="EditButton" Content="Изменить" Grid.Row="11" Grid.Column="2" Click="EditButton_Click" Visibility="Collapsed"></Button>
         <Button x:Name="ClearButton" Click="Clear_Click" Content="Очистить" Grid.Row="11" Grid.Column="4" Grid.ColumnSpan="2"></Button>

@@ -178,6 +178,7 @@
     <Compile Include="Add\Supply_add.xaml.cs">
       <DependentUpon>Supply_add.xaml</DependentUpon>
     </Compile>
+    <Compile Include="AES.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
